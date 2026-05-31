@@ -2,7 +2,6 @@ const User = require("../models/user");
 const validate = require('../utils/validator');
 const bcrypt=require("bcrypt");
 const jwt =require('jsonwebtoken');
-const authRouter=require("../routes/userAuth");
 const redisClient = require("../config/redis");
 
 //register

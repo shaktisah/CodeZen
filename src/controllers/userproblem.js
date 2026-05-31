@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const Problem = require("../models/problem");
 const { getLanguageById, submitBatch } = require("../utils/ProblemUtility");
 
@@ -16,6 +17,14 @@ const createProblem = async (req, res) => {
     } = req.body;
 
     try {
+        const creatorId = problemCreator || (req.user && req.user.id);
+        if (!creatorId) {
+            return res.status(400).json({
+                success: false,
+                message: "Failed to create problem: problemCreator is required."
+            });
+        }
+
         const allTestCases = [...visibleTestCases, ...hiddenTestCases];
 
         for (const { language, completeCode } of referenceSolution) {
@@ -105,7 +114,7 @@ const createProblem = async (req, res) => {
             hiddenTestCases,
             startCode,
             referenceSolution,
-            problemCreator
+            problemCreator: creatorId
         });
 
         return res.status(201).json({
@@ -126,16 +135,23 @@ const createProblem = async (req, res) => {
 // 2. Get All Problems
 const getAllProblem = async (req, res) => {
     try {
-        const problems = await Problem.find().select("-hiddenTestCases -referenceSolution");
-        return res.status(200).json({ success: true, problems });
+        const problems = await Problem.find({})
+            .select('_id title difficulty tags');
+
+        return res.status(200).json(problems);
     } catch (err) {
-        return res.status(500).json({ success: false, error: err.message });
+        return res.status(500).json({
+            message: err.message
+        });
     }
 };
 
 // 3. Get Problem by ID
 const getproblembyId = async (req, res) => {
     try {
+        if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+            return res.status(400).json({ success: false, message: "Invalid problem ID format" });
+        }
         const problem = await Problem.findById(req.params.id).select("-hiddenTestCases -referenceSolution");
         if (!problem) {
             return res.status(404).json({ success: false, message: "Problem not found" });
@@ -149,6 +165,9 @@ const getproblembyId = async (req, res) => {
 // 4. Update Problem
 const updateProblem = async (req, res) => {
     try {
+        if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+            return res.status(400).json({ success: false, message: "Invalid problem ID format" });
+        }
         const problem = await Problem.findByIdAndUpdate(req.params.id, req.body, { new: true });
         if (!problem) {
             return res.status(404).json({ success: false, message: "Problem not found" });
@@ -162,6 +181,9 @@ const updateProblem = async (req, res) => {
 // 5. Delete Problem
 const deleteProblem = async (req, res) => {
     try {
+        if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+            return res.status(400).json({ success: false, message: "Invalid problem ID format" });
+        }
         const problem = await Problem.findByIdAndDelete(req.params.id);
         if (!problem) {
             return res.status(404).json({ success: false, message: "Problem not found" });
@@ -175,10 +197,27 @@ const deleteProblem = async (req, res) => {
 // 6. Get User Solved Problems
 const solvedProblem = async (req, res) => {
     try {
-        // Implement solved problem listing depending on your UserSchema solved list
-        return res.status(200).json({ success: true, message: "Solved problems route" });
+        const user = req.result;
+        if (!user) {
+            return res.status(401).json({ success: false, message: "Unauthorized: User context missing" });
+        }
+        return res.status(200).json({ success: true, solved: user.problenSolved || [] });
     } catch (err) {
         return res.status(500).json({ success: false, error: err.message });
+    }
+};
+
+// 7. Get Count of Solved Problems by User
+const solvedAllProblemByUser = async (req, res) => {
+    try {
+        const user = req.result;
+        if (!user) {
+            return res.status(401).json({ success: false, message: "Unauthorized: User context missing" });
+        }
+        const count = (user.problenSolved && user.problenSolved.length) || 0;
+        return res.status(200).send(String(count));
+    } catch (err) {
+        return res.status(500).send("server Error");
     }
 };
 
@@ -188,5 +227,6 @@ module.exports = {
     getproblembyId,
     updateProblem,
     deleteProblem,
-    solvedProblem
+    solvedProblem,
+    solvedAllProblemByUser
 };
