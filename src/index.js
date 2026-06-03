@@ -20,7 +20,7 @@ app.use('/submission', submitRouter);
 const InitializationConnection=async ()=>{
     try{
         await Promise.all([main(),redisClient.connect()]);
-        console.log("Database Connected sucessfully");
+        console.log("Database Connected successfully");
 
         app.listen(process.env.PORT,()=>{
     console.log("server Listining at port number:"+process.env.PORT);

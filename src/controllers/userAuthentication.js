@@ -3,6 +3,7 @@ const validate = require('../utils/validator');
 const bcrypt=require("bcrypt");
 const jwt =require('jsonwebtoken');
 const redisClient = require("../config/redis");
+const Submission = require("../models/submission");
 
 //register
 const register = async (req, res) => {
@@ -105,7 +106,7 @@ const logout= async(req,res)=>{
         res.cookie("token", null, {
        expires: new Date(Date.now())
           });
-        res.send("Logged Out Sucessfully");
+        res.send("Logged Out Successfully");
 
 
     }
@@ -114,4 +115,26 @@ const logout= async(req,res)=>{
     }
 }
 
-module.exports = {register, adminRegister, login, logout};
+//deleteProfile
+const deleteProfile = async (req, res) => {
+    try {
+        const userId = req.result._id;
+
+        // user schema delete
+        await User.findByIdAndDelete(userId);
+
+        // all submissions delete
+        await Submission.deleteMany({ userId });
+
+        // clear the auth cookie
+        res.cookie("token", null, {
+            expires: new Date(Date.now())
+        });
+
+        res.status(200).send("Deleted successfully");
+    } catch (err) {
+        res.status(500).send("Internal Server Error");
+    }
+};
+
+module.exports = {register, adminRegister, login, logout, deleteProfile};

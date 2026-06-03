@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Problem = require("../models/problem");
 const { getLanguageById, submitBatch } = require("../utils/ProblemUtility");
+const User = require("../models/user");
 
 // 1. Create Problem (with OneCompiler verification)
 const createProblem = async (req, res) => {
@@ -201,23 +202,20 @@ const solvedProblem = async (req, res) => {
         if (!user) {
             return res.status(401).json({ success: false, message: "Unauthorized: User context missing" });
         }
-        return res.status(200).json({ success: true, solved: user.problenSolved || [] });
+        return res.status(200).json({ success: true, solved: user.problemSolved || [] });
     } catch (err) {
         return res.status(500).json({ success: false, error: err.message });
     }
 };
 
-// 7. Get Count of Solved Problems by User
+// 7. Get All Solved Problems by User (populated)
 const solvedAllProblemByUser = async (req, res) => {
     try {
-        const user = req.result;
-        if (!user) {
-            return res.status(401).json({ success: false, message: "Unauthorized: User context missing" });
-        }
-        const count = (user.problenSolved && user.problenSolved.length) || 0;
-        return res.status(200).send(String(count));
+        const userId = req.result._id;
+        const user = await User.findById(userId).populate("problemSolved");
+        return res.status(200).send(user);
     } catch (err) {
-        return res.status(500).send("server Error");
+        return res.status(500).send("Server Error");
     }
 };
 
