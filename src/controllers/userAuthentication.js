@@ -5,7 +5,6 @@ const jwt =require('jsonwebtoken');
 const redisClient = require("../config/redis");
 const Submission = require("../models/submission");
 
-//register
 const register = async (req, res) => {
   try {
     validate(req.body);
@@ -14,7 +13,6 @@ const register = async (req, res) => {
 
     req.body.password = await bcrypt.hash(password, 10);
 
-    
     req.body.role = "user";
 
     const user = await User.create(req.body);
@@ -33,7 +31,6 @@ const register = async (req, res) => {
   }
 };
 
-//adminRegister
 const adminRegister = async (req, res) => {
   try {
     validate(req.body);
@@ -60,7 +57,6 @@ const adminRegister = async (req, res) => {
   }
 };
 
-//login
 const login = async (req, res) => {
   try {
     const { emailId, password } = req.body;
@@ -94,7 +90,6 @@ const login = async (req, res) => {
   }
 };
 
-//logout
 const logout= async(req,res)=>{
     try{
         const {token}=req.cookies;
@@ -104,29 +99,23 @@ const logout= async(req,res)=>{
         await redisClient.expireAt(`token:${token}`,payload.exp);
 
         res.cookie("token", null, {
-       expires: new Date(Date.now())
-          });
+            expires: new Date(Date.now())
+        });
         res.send("Logged Out Successfully");
-
-
     }
     catch(err){
        res.status(403).send("Error:"+err.message);
     }
 }
 
-//deleteProfile
 const deleteProfile = async (req, res) => {
     try {
         const userId = req.result._id;
 
-        // user schema delete
         await User.findByIdAndDelete(userId);
 
-        // all submissions delete
         await Submission.deleteMany({ userId });
 
-        // clear the auth cookie
         res.cookie("token", null, {
             expires: new Date(Date.now())
         });

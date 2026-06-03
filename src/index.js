@@ -8,8 +8,6 @@ const authRouter = require('./routes/userAuth');
 const problemRouter = require('./routes/problemCreator');
 const submitRouter = require('./routes/submit');
 
-
-
 app.use(express.json());
 app.use(cookieParser());
 
@@ -23,8 +21,8 @@ const InitializationConnection=async ()=>{
         console.log("Database Connected successfully");
 
         app.listen(process.env.PORT,()=>{
-    console.log("server Listining at port number:"+process.env.PORT);
-})
+            console.log("server Listining at port number:"+process.env.PORT);
+        })
     }
     catch(err){
         console.log("Error: "+err);
@@ -32,20 +30,3 @@ const InitializationConnection=async ()=>{
 }
 
 InitializationConnection();
-
-
-
-
-
-
-
-// main()
-// .then(async ()=>{
-// app.listen(process.env.PORT,()=>{
-//     console.log("server Listining at port number:"+process.env.PORT);
-// })
-// })
-// .catch(err=> console.log("Error Occure"));
-
-
-

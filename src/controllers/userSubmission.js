@@ -16,7 +16,6 @@ const submitCode = async (req, res) => {
             return res.status(400).send("some field missing");
         }
 
-        // Fetch the problem from database
         const problem = await Problem.findById(problemId);
         if (!problem) {
             return res.status(404).send("Problem not found");
@@ -27,7 +26,6 @@ const submitCode = async (req, res) => {
             return res.status(400).send("This problem has no test cases to evaluate.");
         }
 
-        // Store the submission in database first with 'Pending' status
         const submittedResult = await Submission.create({
             userId,
             problemId,
@@ -38,7 +36,6 @@ const submitCode = async (req, res) => {
             totalTestCases: allTestCases.length
         });
 
-        // Submit code to OneCompiler
         const languageId = getLanguageById(language);
 
         const submissions = allTestCases.map((testCase) => {
@@ -48,13 +45,12 @@ const submitCode = async (req, res) => {
 
             let driverCode = code;
 
-            // Dynamically wrap code based on language
             if (languageId === "javascript") {
                 let formattedInput = `const ${testCase.input.replace(/,\s*(?=[a-zA-Z_])/g, '; const ')}`;
-                driverCode += `\n\n// Driver code\n${formattedInput};\nconsole.log(JSON.stringify(twoSum(nums, target)));`;
+                driverCode += `\n\n${formattedInput};\nconsole.log(JSON.stringify(twoSum(nums, target)));`;
             } else if (languageId === "python") {
                 let formattedInput = testCase.input.replace(/,\s*(?=[a-zA-Z_])/g, '\n');
-                driverCode += `\n\n# Driver code\n${formattedInput}\nprint(twoSum(nums, target))`;
+                driverCode += `\n\n${formattedInput}\nprint(twoSum(nums, target))`;
             } else if (languageId === "cpp") {
                 let formattedInput = testCase.input;
                 formattedInput = formattedInput.replace(/\[/g, '{').replace(/\]/g, '}');
@@ -62,7 +58,6 @@ const submitCode = async (req, res) => {
                 formattedInput = formattedInput.replace(/target\s*=\s*/g, 'int target = ');
                 formattedInput = formattedInput.replace(/,\s*(?=int target)/g, '; ');
 
-                // Support both standalone twoSum and Leetcode-style class Solution
                 const hasSolutionClass = code.includes("class Solution");
                 const solverCall = hasSolutionClass ? 
                     "Solution solver;\n    vector<int> res = solver.twoSum(nums, target);" :
@@ -94,7 +89,6 @@ const submitCode = async (req, res) => {
 
         const testResult = await submitBatch(submissions);
 
-        // Update the submit result
         let testCasesPassed = 0;
         let finalStatus = "Accepted";
         let errorMessage = null;
@@ -104,7 +98,6 @@ const submitCode = async (req, res) => {
         for (let i = 0; i < testResult.length; i++) {
             const test = testResult[i];
             
-            // Check for API errors, exceptions, or compilation/runtime errors in stderr
             if (test.status !== "success" || test.exception || test.stderr) {
                 finalStatus = test.stderr ? "Compilation Error" : "Runtime Error";
                 errorMessage = test.stderr || test.exception || "Execution failed";
@@ -125,7 +118,6 @@ const submitCode = async (req, res) => {
             }
         }
 
-        // Store the result in database
         submittedResult.status = finalStatus;
         submittedResult.testCasesPassed = testCasesPassed;
         submittedResult.errorMessage = errorMessage;
@@ -134,7 +126,6 @@ const submitCode = async (req, res) => {
 
         await submittedResult.save();
 
-        // If the solution is fully Accepted, update the user's solved list
         if (finalStatus === "Accepted") {
             const user = await User.findById(userId);
             if (user) {
@@ -167,7 +158,6 @@ const runCode = async (req, res) => {
             return res.status(400).send("some field missing");
         }
 
-        // Fetch the problem from database
         const problem = await Problem.findById(problemId);
         if (!problem) {
             return res.status(404).send("Problem not found");
@@ -178,7 +168,6 @@ const runCode = async (req, res) => {
             return res.status(400).send("This problem has no visible test cases to run.");
         }
 
-        // Submit code to OneCompiler
         const languageId = getLanguageById(language);
 
         const submissions = visibleTestCases.map((testCase) => {
@@ -188,13 +177,12 @@ const runCode = async (req, res) => {
 
             let driverCode = code;
 
-            // Dynamically wrap code based on language
             if (languageId === "javascript") {
                 let formattedInput = `const ${testCase.input.replace(/,\s*(?=[a-zA-Z_])/g, '; const ')}`;
-                driverCode += `\n\n// Driver code\n${formattedInput};\nconsole.log(JSON.stringify(twoSum(nums, target)));`;
+                driverCode += `\n\n${formattedInput};\nconsole.log(JSON.stringify(twoSum(nums, target)));`;
             } else if (languageId === "python") {
                 let formattedInput = testCase.input.replace(/,\s*(?=[a-zA-Z_])/g, '\n');
-                driverCode += `\n\n# Driver code\n${formattedInput}\nprint(twoSum(nums, target))`;
+                driverCode += `\n\n${formattedInput}\nprint(twoSum(nums, target))`;
             } else if (languageId === "cpp") {
                 let formattedInput = testCase.input;
                 formattedInput = formattedInput.replace(/\[/g, '{').replace(/\]/g, '}');
@@ -202,7 +190,6 @@ const runCode = async (req, res) => {
                 formattedInput = formattedInput.replace(/target\s*=\s*/g, 'int target = ');
                 formattedInput = formattedInput.replace(/,\s*(?=int target)/g, '; ');
 
-                // Support both standalone twoSum and Leetcode-style class Solution
                 const hasSolutionClass = code.includes("class Solution");
                 const solverCall = hasSolutionClass ? 
                     "Solution solver;\n    vector<int> res = solver.twoSum(nums, target);" :
@@ -234,7 +221,6 @@ const runCode = async (req, res) => {
 
         const testResult = await submitBatch(submissions);
 
-        // Process results
         const runResults = [];
         let allPassed = true;
         let overallStatus = "Accepted";

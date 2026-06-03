@@ -3,7 +3,6 @@ const Problem = require("../models/problem");
 const { getLanguageById, submitBatch } = require("../utils/ProblemUtility");
 const User = require("../models/user");
 
-// 1. Create Problem (with OneCompiler verification)
 const createProblem = async (req, res) => {
     const {
         title,
@@ -29,9 +28,8 @@ const createProblem = async (req, res) => {
         const allTestCases = [...visibleTestCases, ...hiddenTestCases];
 
         for (const { language, completeCode } of referenceSolution) {
-            const languageId = getLanguageById(language); // "javascript", "cpp", "python", "java"
+            const languageId = getLanguageById(language);
 
-            // Map test cases to OneCompiler payload structure
             const submissions = allTestCases.map((testCase) => {
                 const ext = languageId === "javascript" ? "js" :
                             languageId === "python" ? "py" :
@@ -39,13 +37,12 @@ const createProblem = async (req, res) => {
 
                 let driverCode = completeCode;
 
-                // Dynamically wrap the reference code to execute the testcase and print result
                 if (languageId === "javascript") {
                     let formattedInput = `const ${testCase.input.replace(/,\s*(?=[a-zA-Z_])/g, '; const ')}`;
-                    driverCode += `\n\n// Driver code\n${formattedInput};\nconsole.log(JSON.stringify(twoSum(nums, target)));`;
+                    driverCode += `\n\n${formattedInput};\nconsole.log(JSON.stringify(twoSum(nums, target)));`;
                 } else if (languageId === "python") {
                     let formattedInput = testCase.input.replace(/,\s*(?=[a-zA-Z_])/g, '\n');
-                    driverCode += `\n\n# Driver code\n${formattedInput}\nprint(twoSum(nums, target))`;
+                    driverCode += `\n\n${formattedInput}\nprint(twoSum(nums, target))`;
                 } else if (languageId === "cpp") {
                     let formattedInput = testCase.input;
                     formattedInput = formattedInput.replace(/\[/g, '{').replace(/\]/g, '}');
@@ -55,7 +52,6 @@ const createProblem = async (req, res) => {
 
                     driverCode = `#include <iostream>\n#include <vector>\n#include <unordered_map>\nusing namespace std;\n\n${completeCode}\n\nint main() {\n    ${formattedInput};\n    vector<int> res = twoSum(nums, target);\n    if (res.size() >= 2) {\n        cout << "[" << res[0] << "," << res[1] << "]";\n    }\n    return 0;\n}`;
                 } else if (languageId === "java") {
-                    // For java, wrap it inside a class with a main method
                     let formattedInput = testCase.input;
                     formattedInput = formattedInput.replace(/\[/g, 'new int[]{').replace(/\]/g, '}');
                     formattedInput = formattedInput.replace(/nums\s*=\s*/g, 'int[] nums = ');
@@ -78,10 +74,8 @@ const createProblem = async (req, res) => {
                 };
             });
 
-            // Submit all test cases to OneCompiler API in parallel
             const results = await submitBatch(submissions);
 
-            // Verify results
             for (let i = 0; i < results.length; i++) {
                 const result = results[i];
                 if (result.status !== "success" || result.exception) {
@@ -105,7 +99,6 @@ const createProblem = async (req, res) => {
             }
         }
 
-        // If verified, save problem to MongoDB
         const problem = await Problem.create({
             title,
             description,
@@ -133,7 +126,6 @@ const createProblem = async (req, res) => {
     }
 };
 
-// 2. Get All Problems
 const getAllProblem = async (req, res) => {
     try {
         const problems = await Problem.find({})
@@ -147,7 +139,6 @@ const getAllProblem = async (req, res) => {
     }
 };
 
-// 3. Get Problem by ID
 const getproblembyId = async (req, res) => {
     try {
         if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
@@ -163,7 +154,6 @@ const getproblembyId = async (req, res) => {
     }
 };
 
-// 4. Update Problem
 const updateProblem = async (req, res) => {
     try {
         if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
@@ -179,7 +169,6 @@ const updateProblem = async (req, res) => {
     }
 };
 
-// 5. Delete Problem
 const deleteProblem = async (req, res) => {
     try {
         if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
@@ -195,7 +184,6 @@ const deleteProblem = async (req, res) => {
     }
 };
 
-// 6. Get User Solved Problems
 const solvedProblem = async (req, res) => {
     try {
         const user = req.result;
@@ -208,7 +196,6 @@ const solvedProblem = async (req, res) => {
     }
 };
 
-// 7. Get All Solved Problems by User (populated)
 const solvedAllProblemByUser = async (req, res) => {
     try {
         const userId = req.result._id;
