@@ -6,7 +6,8 @@ import { useNavigate, Link } from 'react-router-dom';
 
 // schema validation for signup..using zod
 const signupSchema = z.object({
-  firstName: z.string().min(3, "Name should contain at least 3 letters."),
+  firstName: z.string().min(3, "First name should contain at least 3 letters."),
+  lastName: z.string().min(2, "Last name should contain at least 2 letters."),
   emailId: z.string().email("Invalid Email"),
   password: z.string().min(8, "Password must be at least 8 characters.")
 });
@@ -68,17 +69,31 @@ function Signup() {
               onSubmit={handleSubmit(onSubmit)}
               className="space-y-4"
             >
-              <div>
-                <input
-                  {...register('firstName')}
-                  placeholder="Rahul Sah" 
-                  className="input input-bordered w-full"
-                />
-                {errors.firstName && (
-                  <span className="text-error text-sm mt-1 block">
-                    {errors.firstName.message}
-                  </span>
-                )}
+              <div className="flex gap-4">
+                <div className="w-1/2">
+                  <input
+                    {...register('firstName')}
+                    placeholder="First Name" 
+                    className="input input-bordered w-full"
+                  />
+                  {errors.firstName && (
+                    <span className="text-error text-sm mt-1 block">
+                      {errors.firstName.message}
+                    </span>
+                  )}
+                </div>
+                <div className="w-1/2">
+                  <input
+                    {...register('lastName')}
+                    placeholder="Last Name" 
+                    className="input input-bordered w-full"
+                  />
+                  {errors.lastName && (
+                    <span className="text-error text-sm mt-1 block">
+                      {errors.lastName.message}
+                    </span>
+                  )}
+                </div>
               </div>
 
               <div>
