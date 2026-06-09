@@ -3,6 +3,33 @@ const { getLanguageById, submitBatch } = require("../utils/ProblemUtility");
 const Problem = require("../models/problem");
 const User = require("../models/user");
 
+const extractFunctionName = (problem, languageId) => {
+    const startCodeObj = problem.startCode?.find(
+        c => c.language.toLowerCase() === languageId.toLowerCase() || 
+             (languageId === 'javascript' && c.language.toLowerCase() === 'js') ||
+             (languageId === 'cpp' && c.language.toLowerCase() === 'c++')
+    );
+    const initialCode = startCodeObj ? startCodeObj.initialCode : "";
+    
+    let funcName = 'solve';
+    if (initialCode) {
+        let match;
+        if (languageId === 'javascript') {
+            match = initialCode.match(/function\s+([a-zA-Z0-9_]+)\s*\(/);
+        } else if (languageId === 'python') {
+            match = initialCode.match(/def\s+([a-zA-Z0-9_]+)\s*\(/);
+        } else if (languageId === 'cpp') {
+            match = initialCode.match(/(?:vector<[^>]+>|\w+)\s+([a-zA-Z0-9_]+)\s*\(/);
+        } else if (languageId === 'java') {
+            match = initialCode.match(/(?:public|private|protected)?\s*(?:static\s+)?(?:\w+(?:\[\])?)\s+([a-zA-Z0-9_]+)\s*\(/);
+        }
+        if (match) {
+            funcName = match[1];
+        }
+    }
+    return funcName;
+};
+
 const submitCode = async (req, res) => {
     try {
         const userId = req.result ? req.result._id : (req.user ? req.user.id : null);
@@ -37,6 +64,7 @@ const submitCode = async (req, res) => {
         });
 
         const languageId = getLanguageById(language);
+        const funcName = extractFunctionName(problem, languageId);
 
         const submissions = allTestCases.map((testCase) => {
             const ext = languageId === "javascript" ? "js" :
@@ -47,10 +75,10 @@ const submitCode = async (req, res) => {
 
             if (languageId === "javascript") {
                 let formattedInput = `const ${testCase.input.replace(/,\s*(?=[a-zA-Z_])/g, '; const ')}`;
-                driverCode += `\n\n${formattedInput};\nconsole.log(JSON.stringify(twoSum(nums, target)));`;
+                driverCode += `\n\n${formattedInput};\nconsole.log(JSON.stringify(${funcName}(nums, target)));`;
             } else if (languageId === "python") {
                 let formattedInput = testCase.input.replace(/,\s*(?=[a-zA-Z_])/g, '\n');
-                driverCode += `\n\n${formattedInput}\nprint(twoSum(nums, target))`;
+                driverCode += `\n\n${formattedInput}\nprint(${funcName}(nums, target))`;
             } else if (languageId === "cpp") {
                 let formattedInput = testCase.input;
                 formattedInput = formattedInput.replace(/\[/g, '{').replace(/\]/g, '}');
@@ -60,8 +88,8 @@ const submitCode = async (req, res) => {
 
                 const hasSolutionClass = code.includes("class Solution");
                 const solverCall = hasSolutionClass ? 
-                    "Solution solver;\n    vector<int> res = solver.twoSum(nums, target);" :
-                    "vector<int> res = twoSum(nums, target);";
+                    `Solution solver;\n    vector<int> res = solver.${funcName}(nums, target);` :
+                    `vector<int> res = ${funcName}(nums, target);`;
 
                 driverCode = `#include <iostream>\n#include <vector>\n#include <unordered_map>\nusing namespace std;\n\n${code}\n\nint main() {\n    ${formattedInput};\n    ${solverCall}\n    if (res.size() >= 2) {\n        cout << "[" << res[0] << "," << res[1] << "]";\n    }\n    return 0;\n}`;
             } else if (languageId === "java") {
@@ -71,7 +99,7 @@ const submitCode = async (req, res) => {
                 formattedInput = formattedInput.replace(/target\s*=\s*/g, 'int target = ');
                 formattedInput = formattedInput.replace(/,\s*(?=int target)/g, '; ');
 
-                driverCode = `import java.util.*;\n\npublic class Main {\n    ${code}\n\n    public static void main(String[] args) {\n        Main solver = new Main();\n        ${formattedInput};\n        int[] res = solver.twoSum(nums, target);\n        System.out.print(Arrays.toString(res).replace(" ", ""));\n    }\n}`;
+                driverCode = `import java.util.*;\n\npublic class Main {\n    ${code}\n\n    public static void main(String[] args) {\n        Main solver = new Main();\n        ${formattedInput};\n        int[] res = solver.${funcName}(nums, target);\n        System.out.print(Arrays.toString(res).replace(" ", ""));\n    }\n}`;
             }
 
             return {
@@ -169,6 +197,7 @@ const runCode = async (req, res) => {
         }
 
         const languageId = getLanguageById(language);
+        const funcName = extractFunctionName(problem, languageId);
 
         const submissions = visibleTestCases.map((testCase) => {
             const ext = languageId === "javascript" ? "js" :
@@ -179,10 +208,10 @@ const runCode = async (req, res) => {
 
             if (languageId === "javascript") {
                 let formattedInput = `const ${testCase.input.replace(/,\s*(?=[a-zA-Z_])/g, '; const ')}`;
-                driverCode += `\n\n${formattedInput};\nconsole.log(JSON.stringify(twoSum(nums, target)));`;
+                driverCode += `\n\n${formattedInput};\nconsole.log(JSON.stringify(${funcName}(nums, target)));`;
             } else if (languageId === "python") {
                 let formattedInput = testCase.input.replace(/,\s*(?=[a-zA-Z_])/g, '\n');
-                driverCode += `\n\n${formattedInput}\nprint(twoSum(nums, target))`;
+                driverCode += `\n\n${formattedInput}\nprint(${funcName}(nums, target))`;
             } else if (languageId === "cpp") {
                 let formattedInput = testCase.input;
                 formattedInput = formattedInput.replace(/\[/g, '{').replace(/\]/g, '}');
@@ -192,8 +221,8 @@ const runCode = async (req, res) => {
 
                 const hasSolutionClass = code.includes("class Solution");
                 const solverCall = hasSolutionClass ? 
-                    "Solution solver;\n    vector<int> res = solver.twoSum(nums, target);" :
-                    "vector<int> res = twoSum(nums, target);";
+                    `Solution solver;\n    vector<int> res = solver.${funcName}(nums, target);` :
+                    `vector<int> res = ${funcName}(nums, target);`;
 
                 driverCode = `#include <iostream>\n#include <vector>\n#include <unordered_map>\nusing namespace std;\n\n${code}\n\nint main() {\n    ${formattedInput};\n    ${solverCall}\n    if (res.size() >= 2) {\n        cout << "[" << res[0] << "," << res[1] << "]";\n    }\n    return 0;\n}`;
             } else if (languageId === "java") {
@@ -203,7 +232,7 @@ const runCode = async (req, res) => {
                 formattedInput = formattedInput.replace(/target\s*=\s*/g, 'int target = ');
                 formattedInput = formattedInput.replace(/,\s*(?=int target)/g, '; ');
 
-                driverCode = `import java.util.*;\n\npublic class Main {\n    ${code}\n\n    public static void main(String[] args) {\n        Main solver = new Main();\n        ${formattedInput};\n        int[] res = solver.twoSum(nums, target);\n        System.out.print(Arrays.toString(res).replace(" ", ""));\n    }\n}`;
+                driverCode = `import java.util.*;\n\npublic class Main {\n    ${code}\n\n    public static void main(String[] args) {\n        Main solver = new Main();\n        ${formattedInput};\n        int[] res = solver.${funcName}(nums, target);\n        System.out.print(Arrays.toString(res).replace(" ", ""));\n    }\n}`;
             }
 
             return {
@@ -277,4 +306,17 @@ const runCode = async (req, res) => {
     }
 };
 
-module.exports = { submitCode, runCode };
+const getMySubmissions = async (req, res) => {
+    try {
+        const userId = req.result._id;
+        const submissions = await Submission.find({ userId })
+            .populate('problemId', 'title difficulty')
+            .sort({ createdAt: -1 });
+        return res.status(200).json({ success: true, submissions });
+    } catch (err) {
+        console.error("GetMySubmissions error:", err);
+        return res.status(500).json({ success: false, message: "Internal Server Error", error: err.message });
+    }
+};
+
+module.exports = { submitCode, runCode, getMySubmissions };

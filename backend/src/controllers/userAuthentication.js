@@ -23,13 +23,15 @@ const register = async (req, res) => {
 
     const reply={
       firstName:user.firstName,
+      lastName:user.lastName,
       emailId:user.emailId,
+      role:user.role,
       _id:user._id
      }
 
 
     const token = jwt.sign(
-      { _id: user._id, emailId: user.emailId,role:'user' },
+      { _id: user._id, emailId: user.emailId, role: user.role },
       process.env.JWT_KEY,
       { expiresIn: 60 * 60 }
     );
@@ -66,12 +68,14 @@ const login = async (req, res) => {
 
      const reply={
       firstName:user.firstName,
+      lastName:user.lastName,
       emailId:user.emailId,
+      role:user.role,
       _id:user._id
      }
 
     const token = jwt.sign(
-      { _id: user._id, emailId: user.emailId,role:'user.role'},
+      { _id: user._id, emailId: user.emailId, role: user.role },
       process.env.JWT_KEY,
       { expiresIn: 60 * 60 }
     );
@@ -125,7 +129,7 @@ const adminRegister = async (req, res) => {
     const user = await User.create(req.body);
 
     const token = jwt.sign(
-      { _id: user._id, emailId: user.emailId,role:'user.role' },
+      { _id: user._id, emailId: user.emailId, role: user.role },
       process.env.JWT_KEY,
       { expiresIn: 60 * 60 }
     );
@@ -171,6 +175,25 @@ const deleteProfile = async (req, res) => {
   }
 };
 
+const check = async (req, res) => {
+  try {
+    const user = req.result;
+    if (!user) {
+      return res.status(401).send("Unauthorized");
+    }
+    return res.status(200).json({
+      user: {
+        _id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        emailId: user.emailId,
+        role: user.role
+      },
+      message: "Authenticated successfully"
+    });
+  } catch (err) {
+    return res.status(500).send("Internal Server Error: " + err.message);
+  }
+};
 
-
-module.exports = {register, login, logout, adminRegister,deleteProfile};
+module.exports = {register, login, logout, adminRegister, deleteProfile, check};
