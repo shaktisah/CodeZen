@@ -12,6 +12,20 @@ dist
 dist-ssr
 *.local
 
+# Environment variables
+.env
+.env.local
+.env.development
+.env.production
+.env.*
+
+# Testing & coverage
+coverage
+
+# Caching
+.eslintcache
+.turbo
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
