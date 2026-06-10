@@ -280,7 +280,7 @@ function ProblemWorkspace() {
                   onClick={() => setActiveWorkspaceTab(tab)}
                   className={`relative py-3.5 text-xs font-bold capitalize transition-all cursor-pointer ${
                     activeWorkspaceTab === tab
-                      ? 'text-cyan-600 dark:text-cyan-400 border-b-2 border-cyan-550'
+                      ? 'text-cyan-600 dark:text-cyan-400 border-b-2 border-cyan-500 dark:border-cyan-400'
                       : 'text-zinc-500 hover:text-zinc-800 dark:hover:text-white border-b-2 border-transparent'
                   }`}
                 >
@@ -303,7 +303,7 @@ function ProblemWorkspace() {
                 type="button"
                 onClick={handleSubmitCode}
                 disabled={running || submitting}
-                className="btn btn-xs bg-cyan-600 hover:bg-cyan-550 dark:bg-cyan-650 dark:hover:bg-cyan-600 text-white rounded-md px-3 py-1 cursor-pointer border-none text-[10px] font-bold transition-all disabled:opacity-40 shadow-lg shadow-cyan-500/10"
+                className="btn btn-xs bg-cyan-600 hover:bg-cyan-500 dark:bg-cyan-600 dark:hover:bg-cyan-500 text-white rounded-md px-3 py-1 cursor-pointer border-none text-[10px] font-bold transition-all disabled:opacity-40 shadow-lg shadow-cyan-500/10"
               >
                 {submitting ? 'Submitting...' : 'Submit'}
               </button>
@@ -328,7 +328,7 @@ function ProblemWorkspace() {
                         onClick={() => handleLanguageChange({ target: { value: lang } })}
                         className={`px-3 py-1.5 rounded-lg text-[10px] font-bold transition-all cursor-pointer uppercase tracking-wider ${
                           isActive
-                            ? 'bg-indigo-650 text-white shadow-md'
+                            ? 'bg-indigo-600 text-white shadow-md'
                             : 'text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-300 bg-transparent'
                         }`}
                       >
@@ -344,7 +344,7 @@ function ProblemWorkspace() {
                     value={code}
                     onChange={(e) => setCode(e.target.value)}
                     spellCheck="false"
-                    className="w-full h-full p-4 font-mono text-xs bg-zinc-50 dark:bg-[#09090b]/20 text-zinc-800 dark:text-zinc-200 resize-none focus:outline-none leading-relaxed transition-colors duration-200 flex-1"
+                    className="w-full h-full p-4 font-mono text-xs bg-white dark:bg-[#09090b]/20 text-zinc-800 dark:text-zinc-200 resize-none focus:outline-none leading-relaxed transition-colors duration-200 flex-1"
                     style={{ tabSize: 4 }}
                   />
                 </div>
@@ -411,7 +411,7 @@ function ProblemWorkspace() {
                     <div className="flex items-center gap-2 text-xs">
                       <span className="font-bold text-zinc-500 dark:text-zinc-400">Status:</span>
                       <span className={`badge border text-[9px] px-2.5 py-0.5 rounded-md font-bold uppercase ${
-                        runResult.status === 'Accepted' ? 'bg-teal-50 border-teal-200 text-teal-750 dark:bg-teal-950/20 dark:border-teal-900/35 dark:text-teal-400' : 'bg-rose-50 border-rose-200 text-rose-750 dark:bg-rose-950/20 dark:border-rose-900/35 dark:text-rose-400'
+                        runResult.status === 'Accepted' ? 'bg-teal-50 border-teal-200 text-teal-700 dark:bg-teal-950/20 dark:border-teal-900/35 dark:text-teal-400' : 'bg-rose-50 border-rose-200 text-rose-700 dark:bg-rose-950/20 dark:border-rose-900/35 dark:text-rose-400'
                       }`}>
                         {runResult.status}
                       </span>
@@ -431,8 +431,8 @@ function ProblemWorkspace() {
                               onClick={() => setActiveResultTab(idx)}
                               className={`px-3 py-1.5 rounded-lg text-[10px] font-bold cursor-pointer border transition-all ${
                                 activeResultTab === idx
-                                  ? 'bg-cyan-50 border-cyan-200 text-cyan-700 dark:bg-cyan-950/20 dark:border-cyan-850 dark:text-cyan-400'
-                                  : 'bg-white border-zinc-200 text-zinc-550 hover:bg-zinc-100 dark:bg-[#09090b] dark:border-zinc-900 dark:text-zinc-500 dark:hover:bg-zinc-900'
+                                  ? 'bg-cyan-50 border-cyan-200 text-cyan-700 dark:bg-cyan-950/20 dark:border-cyan-800 dark:text-cyan-400'
+                                  : 'bg-white border-zinc-200 text-zinc-500 hover:bg-zinc-100 dark:bg-[#09090b] dark:border-zinc-900 dark:text-zinc-500 dark:hover:bg-zinc-900'
                               }`}
                             >
                               Case {idx + 1} ({res.passed ? 'Pass' : 'Fail'})
@@ -458,8 +458,8 @@ function ProblemWorkspace() {
                               <span className="text-zinc-500 dark:text-zinc-650 font-bold block mb-1">Your stdout:</span>
                               <div className={`border rounded-lg p-2.5 font-bold ${
                                 runResult.results[activeResultTab].passed 
-                                  ? 'bg-teal-50/50 border-teal-200 text-teal-750 dark:bg-teal-950/10 dark:border-teal-900/30 dark:text-teal-400' 
-                                  : 'bg-rose-50/50 border-rose-200 text-rose-750 dark:bg-rose-950/10 dark:border-rose-900/30 dark:text-rose-455'
+                                  ? 'bg-teal-50/50 border-teal-200 text-teal-700 dark:bg-teal-950/10 dark:border-teal-900/30 dark:text-teal-400' 
+                                  : 'bg-rose-50/50 border-rose-200 text-rose-700 dark:bg-rose-950/10 dark:border-rose-900/30 dark:text-rose-500'
                               }`}>
                                 {runResult.results[activeResultTab].actualOutput || 'Empty/Null'}
                               </div>
@@ -467,7 +467,7 @@ function ProblemWorkspace() {
                             {runResult.results[activeResultTab].stderr && (
                               <div>
                                 <span className="text-rose-500 font-bold block mb-1">Standard Error:</span>
-                                <div className="bg-rose-50 border border-rose-200 text-rose-650 dark:bg-rose-950/15 dark:text-rose-400 p-3 rounded-lg whitespace-pre-wrap text-[10px] leading-relaxed">
+                                <div className="bg-rose-50 border border-rose-200 text-rose-700 dark:bg-rose-950/15 dark:text-rose-400 p-3 rounded-lg whitespace-pre-wrap text-[10px] leading-relaxed">
                                   {runResult.results[activeResultTab].stderr}
                                 </div>
                               </div>
@@ -483,7 +483,7 @@ function ProblemWorkspace() {
                     <div className="text-center space-y-3.5">
                       {submitResult.status === 'Accepted' ? (
                         <div className="space-y-3">
-                          <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-teal-50 border border-teal-200 text-teal-750 dark:bg-teal-950/20 dark:border-teal-900/35 dark:text-teal-400 rounded-lg text-[10px] font-bold uppercase transition-colors duration-200">
+                          <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-teal-50 border border-teal-200 text-teal-700 dark:bg-teal-950/20 dark:border-teal-900/35 dark:text-teal-400 rounded-lg text-[10px] font-bold uppercase transition-colors duration-200">
                             🎉 Accepted
                           </div>
                           <h3 className="text-sm font-bold text-zinc-900 dark:text-white">All test cases passed!</h3>
@@ -504,16 +504,16 @@ function ProblemWorkspace() {
                         </div>
                       ) : (
                         <div className="space-y-3">
-                          <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-rose-50 border border-rose-200 text-rose-750 dark:bg-rose-950/20 dark:border-rose-900/35 dark:text-rose-400 rounded-lg text-[10px] font-bold uppercase transition-colors duration-200">
+                          <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-rose-50 border border-rose-200 text-rose-700 dark:bg-rose-950/20 dark:border-rose-900/35 dark:text-rose-400 rounded-lg text-[10px] font-bold uppercase transition-colors duration-200">
                             ❌ {submitResult.status || 'Failed'}
                           </div>
                           
                           {submitResult.errorMessage && (
-                            <div className="max-w-md mx-auto bg-rose-50 border border-rose-200 dark:bg-rose-950/15 dark:border-rose-900/30 rounded-lg p-3 text-[10px] text-rose-650 dark:text-rose-455 font-mono text-left whitespace-pre-wrap leading-relaxed font-bold">
+                            <div className="max-w-md mx-auto bg-rose-50 border border-rose-200 dark:bg-rose-950/15 dark:border-rose-900/30 rounded-lg p-3 text-[10px] text-rose-700 dark:text-rose-400 font-mono text-left whitespace-pre-wrap leading-relaxed font-bold">
                               {submitResult.errorMessage}
                             </div>
                           )}
-                          <p className="text-[10px] text-zinc-500 dark:text-zinc-550 font-mono font-bold">
+                          <p className="text-[10px] text-zinc-500 dark:text-zinc-500 font-mono font-bold">
                             Passed {submitResult.testCasesPassed || 0} / {submitResult.totalTestCases || 0} test cases.
                           </p>
                         </div>

@@ -36,7 +36,7 @@ function Navbar({ isAdminPanel = false }) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
         <div className="flex items-center gap-6">
           <Link to="/" className="flex items-center gap-2 text-lg font-bold tracking-tight text-zinc-900 dark:text-white hover:opacity-90 transition-opacity">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 text-cyan-600 dark:text-cyan-550">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 text-cyan-600 dark:text-cyan-400">
               <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 6.75 22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3-4.5 16.5" />
             </svg>
             <span>{isAdminPanel ? 'CodeZen Admin' : 'CodeZen'}</span>
@@ -45,7 +45,7 @@ function Navbar({ isAdminPanel = false }) {
             <nav className="hidden md:flex items-center gap-5 text-xs font-semibold text-zinc-500 dark:text-zinc-400">
               <Link to="/" className="text-zinc-800 dark:text-zinc-100 hover:text-zinc-900 dark:hover:text-white transition-colors">Problems</Link>
               {user?.role === 'admin' && (
-                <Link to="/admin" className="text-cyan-600 dark:text-zinc-450 hover:text-zinc-900 dark:hover:text-white transition-colors flex items-center gap-1.5">
+                <Link to="/admin" className="text-cyan-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors flex items-center gap-1.5">
                   <span className="w-1.5 h-1.5 rounded-full bg-cyan-500"></span>
                   Admin Panel
                 </Link>
@@ -91,7 +91,7 @@ function Navbar({ isAdminPanel = false }) {
                 </svg>
               </label>
               <ul tabIndex={0} className="dropdown-content menu p-1.5 shadow-2xl bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-900 rounded-lg w-48 mt-1.5 space-y-0.5">
-                <li className="px-3 py-1.5 text-[10px] font-bold text-zinc-500 dark:text-zinc-550 uppercase tracking-wider">
+                <li className="px-3 py-1.5 text-[10px] font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
                   Role: {user.role}
                 </li>
                 <div className="border-t border-zinc-200 dark:border-zinc-900 my-1"></div>

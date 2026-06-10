@@ -77,7 +77,7 @@ function HomePage() {
   const solvedHard = hardProblems.filter(p => solvedProblemIds.has(p._id.toString())).length;
 
   return (
-    <div className="min-h-screen bg-[#09090b] text-zinc-150 font-sans flex flex-col selection:bg-cyan-500/20 selection:text-cyan-200">
+    <div className="min-h-screen bg-zinc-50 dark:bg-[#09090b] text-zinc-800 dark:text-zinc-150 font-sans flex flex-col selection:bg-cyan-500/20 selection:text-cyan-200 transition-colors duration-200">
       
      
       <Navbar />
@@ -90,13 +90,13 @@ function HomePage() {
           
           
           <div className="flex flex-col gap-1 pb-2">
-            <h1 className="text-xl font-bold tracking-tight text-white flex items-center gap-2">
+            <h1 className="text-xl font-bold tracking-tight text-zinc-900 dark:text-white flex items-center gap-2">
               Coding Challenges
-              <span className="text-xs bg-zinc-900 border border-zinc-800 text-zinc-450 px-2 py-0.5 rounded-full font-mono">
+              <span className="text-xs bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 px-2 py-0.5 rounded-full font-mono">
                 {totalCount} total
               </span>
             </h1>
-            <p className="text-xs text-zinc-450">Select a problem to solve, run test cases, and evaluate your solution.</p>
+            <p className="text-xs text-zinc-500 dark:text-zinc-400">Select a problem to solve, run test cases, and evaluate your solution.</p>
           </div>
 
          
@@ -149,8 +149,8 @@ function HomePage() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-zinc-900 py-5 text-center text-[10px] text-zinc-600 mt-auto bg-[#09090b]">
-        <p className="m-0">© 2026 CodeZen Platform. Designed for developers.</p>
+      <footer className="border-t border-zinc-200 dark:border-zinc-900 py-5 text-center text-[10px] text-zinc-500 dark:text-zinc-600 mt-auto bg-zinc-100 dark:bg-[#09090b] transition-colors duration-200">
+        <p className="m-0"> © 2026 CodeZen Platform. Designed & Developed by Shakti.</p>
       </footer>
     </div>
   );

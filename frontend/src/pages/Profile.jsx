@@ -554,7 +554,7 @@ function Profile() {
               )}
 
               {/* Code Container */}
-              <div className="relative group border border-zinc-200 dark:border-zinc-900 rounded-xl overflow-hidden shadow-inner bg-[#09090b] dark:bg-[#040405]">
+              <div className="relative group border border-zinc-800 dark:border-zinc-900 rounded-xl overflow-hidden shadow-inner bg-[#09090b] dark:bg-[#040405]">
                 {/* Copy button overlay */}
                 <button
                   onClick={() => handleCopyCode(selectedSubmission.code)}
@@ -570,7 +570,7 @@ function Profile() {
 
                 <div className="font-mono text-xs overflow-x-auto p-4 flex gap-4 text-zinc-350 dark:text-zinc-400 select-text leading-6">
                   {/* Line Numbers */}
-                  <div className="text-zinc-650 dark:text-zinc-700 text-right select-none pr-3 border-r border-zinc-900">
+                  <div className="text-zinc-500 dark:text-zinc-650 text-right select-none pr-3 border-r border-zinc-800 dark:border-zinc-900">
                     {selectedSubmission.code.split('\n').map((_, index) => (
                       <div key={index}>{index + 1}</div>
                     ))}

@@ -196,9 +196,9 @@ function AdminPanel() {
 
   if (authLoading) {
     return (
-      <div className="min-h-screen bg-[#09090b] flex flex-col items-center justify-center gap-4 text-zinc-550">
-        <span className="loading loading-spinner loading-md text-cyan-500"></span>
-        <p className="text-xs">Authenticating admin...</p>
+      <div className="min-h-screen bg-zinc-50 dark:bg-[#09090b] flex flex-col items-center justify-center gap-4 text-zinc-500 dark:text-zinc-400 transition-colors duration-200">
+        <span className="loading loading-spinner loading-md text-cyan-600 dark:text-cyan-500"></span>
+        <p className="text-xs font-semibold">Authenticating admin...</p>
       </div>
     );
   }

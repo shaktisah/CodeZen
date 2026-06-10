@@ -24,7 +24,7 @@ function FiltersToolbar({
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="Search by title..."
-          className="w-full bg-white dark:bg-[#09090b]/80 border border-zinc-200 dark:border-zinc-900 rounded-lg py-1.5 pl-9 pr-3 text-xs text-zinc-800 dark:text-zinc-250 placeholder-zinc-400 dark:placeholder-zinc-550 focus:outline-none focus:border-cyan-600 transition-colors"
+          className="w-full bg-white dark:bg-[#09090b]/80 border border-zinc-200 dark:border-zinc-900 rounded-lg py-1.5 pl-9 pr-3 text-xs text-zinc-800 dark:text-zinc-300 placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:border-cyan-600 transition-colors"
         />
       </div>
 
@@ -33,7 +33,7 @@ function FiltersToolbar({
         <select
           value={difficultyFilter}
           onChange={(e) => setDifficultyFilter(e.target.value)}
-          className="select select-xs bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-900 text-zinc-700 dark:text-zinc-350 text-[11px] rounded-lg focus:outline-none focus:border-cyan-600 font-semibold"
+          className="select select-xs bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-900 text-zinc-700 dark:text-zinc-300 text-[11px] rounded-lg focus:outline-none focus:border-cyan-600 font-semibold"
         >
           <option value="">Difficulty</option>
           <option value="easy">Easy</option>
@@ -44,7 +44,7 @@ function FiltersToolbar({
         <select
           value={selectedTag}
           onChange={(e) => setSelectedTag(e.target.value)}
-          className="select select-xs bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-900 text-zinc-700 dark:text-zinc-350 text-[11px] rounded-lg focus:outline-none focus:border-cyan-600 font-semibold"
+          className="select select-xs bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-900 text-zinc-700 dark:text-zinc-300 text-[11px] rounded-lg focus:outline-none focus:border-cyan-600 font-semibold"
         >
           <option value="">Tags</option>
           {allTags.map((tag) => (
