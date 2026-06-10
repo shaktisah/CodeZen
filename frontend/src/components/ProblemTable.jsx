@@ -54,7 +54,7 @@ function ProblemTable({ problems, solvedProblemIds, loading, user }) {
                       )}
                     </td>
                     <td className="font-medium text-zinc-900 dark:text-white text-xs">
-                      <Link to={`/problem/${problem._id}`} className="hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors">
+                      <Link to={user ? `/problem/${problem._id}` : "/login"} className="hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors">
                         {problem.title}
                       </Link>
                     </td>

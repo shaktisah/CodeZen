@@ -31,7 +31,7 @@ problemRouter.get("/problemAllSolvedbyuser", userMiddleware, solvedAllProblemByU
 problemRouter.get("/user", userMiddleware, solvedProblem);
 
 // Public get routes
-problemRouter.get("/getAllProblem", userMiddleware, getAllProblem);
+problemRouter.get("/getAllProblem", getAllProblem);
 problemRouter.get("/", getAllProblem);
 problemRouter.get("/ProblemById/:id", userMiddleware, getproblembyId);
 problemRouter.get("/:id", getproblembyId);
