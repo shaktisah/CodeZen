@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../components/AuthContext';
+import axiosClient from '../utils/axiosClient';
 import { EyeIcon, EyeOffIcon } from '../components/icons/EyeIcons';
 
 const loginSchema = z.object({
@@ -30,25 +31,12 @@ function Login() {
     setError('');
     setLoading(true);
     try {
-      const response = await fetch('/api/user/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-        credentials: 'include'
-      });
-
-      const text = await response.text();
-
-      if (response.ok) {
-        await refreshUser();
-        navigate('/');
-      } else {
-        setError(text || 'Login failed. Invalid credentials.');
-      }
+      await axiosClient.post('/user/login', data);
+      await refreshUser();
+      navigate('/');
     } catch (err) {
-      setError('Failed to connect to the server. Please try again.');
+      const msg = err.response?.data || 'Login failed. Invalid credentials.';
+      setError(msg);
     } finally {
       setLoading(false);
     }

@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useNavigate, Link } from 'react-router-dom';
+import axiosClient from '../utils/axiosClient';
 import { EyeIcon, EyeOffIcon } from '../components/icons/EyeIcons';
 
 const signupSchema = z.object({
@@ -29,23 +30,11 @@ function Signup() {
     setLoading(true);
 
     try {
-      const response = await fetch('/api/user/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data)
-      });
-
-      const text = await response.text();
-
-      if (response.ok) {
-        navigate('/login');
-      } else {
-        setError(text || 'Registration failed');
-      }
+      await axiosClient.post('/user/register', data);
+      navigate('/login');
     } catch (err) {
-      setError('Failed to connect to the server. Please try again.');
+      const msg = err.response?.data || 'Registration failed';
+      setError(msg);
     } finally {
       setLoading(false);
     }
