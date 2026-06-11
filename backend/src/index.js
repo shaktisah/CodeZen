@@ -24,6 +24,11 @@ app.use('/problem', problemRouter);
 app.use('/submission', submitRouter);
 app.use('/ai', aiRouter);
 
+app.get('/', (req, res) => {
+    res.status(200).send("CodeZen Backend API is running successfully!");
+});
+
+
 const InitializationConnection=async ()=>{
     try{
         await Promise.all([main(),redisClient.connect()]);
