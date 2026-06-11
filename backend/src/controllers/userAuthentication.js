@@ -7,6 +7,20 @@ const redisClient = require("../config/redis");
 const submission=require("../models/submission");
 const Submission = require("../models/submission");
 
+const cookieOptions = {
+  maxAge: 60 * 60 * 1000,
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: process.env.NODE_ENV === "production" ? "none" : "lax"
+};
+
+const clearCookieOptions = {
+  expires: new Date(Date.now()),
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: process.env.NODE_ENV === "production" ? "none" : "lax"
+};
+
 //register
 const register = async (req, res) => {
   try {
@@ -36,7 +50,7 @@ const register = async (req, res) => {
       { expiresIn: 60 * 60 }
     );
 
-    res.cookie("token", token, { maxAge: 60 * 60 * 1000 });
+    res.cookie("token", token, cookieOptions);
    res.status(200).json({
       user:reply,
       message:"Register Sucessfully"
@@ -80,7 +94,7 @@ const login = async (req, res) => {
       { expiresIn: 60 * 60 }
     );
 
-    res.cookie("token", token, { maxAge: 60 * 60 * 1000 });
+    res.cookie("token", token, cookieOptions);
 
     res.status(201).json({
       user:reply,
@@ -101,9 +115,7 @@ const logout= async(req,res)=>{
         await redisClient.set(`token:${token}`,'Blocked');
         await redisClient.expireAt(`token:${token}`,payload.exp);
 
-        res.cookie("token", null, {
-       expires: new Date(Date.now())
-          });
+        res.cookie("token", null, clearCookieOptions);
         res.send("Logged Out Sucessfully");
 
 
@@ -134,7 +146,7 @@ const adminRegister = async (req, res) => {
       { expiresIn: 60 * 60 }
     );
 
-    res.cookie("token", token, { maxAge: 60 * 60 * 1000 });
+    res.cookie("token", token, cookieOptions);
     res.status(201).send("User Registration Successfully");
 
   } catch (err) {
@@ -165,9 +177,7 @@ const deleteProfile = async (req, res) => {
     }
 
     
-    res.cookie("token", null, {
-      expires: new Date(Date.now())
-    });
+    res.cookie("token", null, clearCookieOptions);
 
     res.status(200).send("deleted successfully");
   } catch (err) {

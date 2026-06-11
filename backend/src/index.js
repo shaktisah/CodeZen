@@ -29,8 +29,8 @@ const InitializationConnection=async ()=>{
         await Promise.all([main(),redisClient.connect()]);
         console.log("Database Connected successfully");
 
-        app.listen(process.env.PORT,()=>{
-            console.log("server Listining at port number:"+process.env.PORT);
+        app.listen(process.env.PORT || 4000,()=>{
+            console.log("server Listining at port number:"+(process.env.PORT || 4000));
         })
     }
     catch(err){
