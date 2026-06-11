@@ -11,6 +11,7 @@ const submitRouter = require('./routes/submit');
 const aiRouter = require('./routes/ai');
 
 const cors = require('cors');
+const checkAndSeedProblems = require('./utils/autoSeed');
 
 const allowedOrigins = process.env.FRONTEND_URL
     ? process.env.FRONTEND_URL.split(',').map(o => o.trim())
@@ -44,6 +45,9 @@ const InitializationConnection=async ()=>{
     try{
         await Promise.all([main(),redisClient.connect()]);
         console.log("Database Connected successfully");
+
+        // Automatically seed problems if database is empty
+        await checkAndSeedProblems();
 
         app.listen(process.env.PORT || 4000, '0.0.0.0', ()=>{
             console.log("server Listining at port number:"+(process.env.PORT || 4000));
