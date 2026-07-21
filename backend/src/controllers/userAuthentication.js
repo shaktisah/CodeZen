@@ -7,18 +7,20 @@ const redisClient = require("../config/redis");
 const submission=require("../models/submission");
 const Submission = require("../models/submission");
 
+const isProd = process.env.NODE_ENV !== "development";
+
 const cookieOptions = {
   maxAge: 60 * 60 * 1000,
   httpOnly: true,
-  secure: process.env.NODE_ENV === "production",
-  sameSite: process.env.NODE_ENV === "production" ? "none" : "lax"
+  secure: isProd,
+  sameSite: isProd ? "none" : "lax"
 };
 
 const clearCookieOptions = {
   expires: new Date(Date.now()),
   httpOnly: true,
-  secure: process.env.NODE_ENV === "production",
-  sameSite: process.env.NODE_ENV === "production" ? "none" : "lax"
+  secure: isProd,
+  sameSite: isProd ? "none" : "lax"
 };
 
 //register

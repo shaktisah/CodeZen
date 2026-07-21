@@ -15,10 +15,32 @@ function HomePage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [difficultyFilter, setDifficultyFilter] = useState('');
   const [selectedTag, setSelectedTag] = useState('');
+  const [fetchError, setFetchError] = useState(null);
 
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
+
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      setFetchError(null);
+      const problemsRes = await axiosClient.get('/problem/getAllProblem');
+      setProblems(Array.isArray(problemsRes.data) ? problemsRes.data : []);
+
+      if (user) {
+        const solvedRes = await axiosClient.get('/problem/user');
+        if (solvedRes.data && solvedRes.data.success) {
+          setSolvedProblemIds(new Set(solvedRes.data.solved.map(id => id.toString())));
+        }
+      }
+    } catch (err) {
+      console.error('Failed to fetch dashboard data:', err);
+      setFetchError('Unable to connect to server. The backend may be spinning up from sleep (Render free tier). Please retry in a few seconds.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Reset page when filters change
   useEffect(() => {
@@ -26,24 +48,6 @@ function HomePage() {
   }, [searchQuery, difficultyFilter, selectedTag]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const problemsRes = await axiosClient.get('/problem/getAllProblem');
-        setProblems(Array.isArray(problemsRes.data) ? problemsRes.data : []);
-
-        if (user) {
-          const solvedRes = await axiosClient.get('/problem/user');
-          if (solvedRes.data && solvedRes.data.success) {
-            setSolvedProblemIds(new Set(solvedRes.data.solved.map(id => id.toString())));
-          }
-        }
-      } catch (err) {
-        console.error('Failed to fetch dashboard data:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchData();
   }, [user]);
 
@@ -98,6 +102,24 @@ function HomePage() {
             </h1>
             <p className="text-xs text-zinc-500 dark:text-zinc-400">Select a problem to solve, run test cases, and evaluate your solution.</p>
           </div>
+
+          {fetchError && (
+            <div className="bg-amber-500/10 border border-amber-500/30 text-amber-600 dark:text-amber-400 p-4 rounded-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
+              <div className="flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 shrink-0">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
+                </svg>
+                <span>{fetchError}</span>
+              </div>
+              <button
+                onClick={fetchData}
+                disabled={loading}
+                className="bg-amber-600 hover:bg-amber-500 text-white font-medium px-3 py-1.5 rounded-lg transition-colors shrink-0 cursor-pointer disabled:opacity-50"
+              >
+                {loading ? 'Reconnecting...' : 'Retry Connection'}
+              </button>
+            </div>
+          )}
 
          
           <FiltersToolbar

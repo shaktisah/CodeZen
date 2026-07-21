@@ -18,7 +18,11 @@ const checkAndSeedProblems = require('./utils/autoSeed');
 
 const allowedOrigins = process.env.FRONTEND_URL
     ? process.env.FRONTEND_URL.split(',').map(o => o.trim())
-    : ['http://localhost:5173', 'http://localhost:3000', '*'];
+    : ['http://localhost:5173', 'http://localhost:3000'];
+
+if (!allowedOrigins.includes('*')) {
+    allowedOrigins.push('*');
+}
 
 app.use(cors({
     origin: function (origin, callback) {

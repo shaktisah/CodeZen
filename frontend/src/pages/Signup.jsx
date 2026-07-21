@@ -44,7 +44,9 @@ function Signup() {
       }
       let cleanMsg = 'Registration failed';
       if (typeof rawErr === 'string') {
-        if (rawErr.trim().startsWith('<') || rawErr.includes('<!DOCTYPE html>')) {
+        if (rawErr.toLowerCase().includes('network error') || rawErr.toLowerCase().includes('timeout')) {
+          cleanMsg = 'Server connection error. The server may be waking up from sleep (Render free tier). Please try clicking Sign Up again in a few seconds.';
+        } else if (rawErr.trim().startsWith('<') || rawErr.includes('<!DOCTYPE html>')) {
           cleanMsg = 'Server error or connection issue. Please try again.';
         } else {
           cleanMsg = rawErr.replace(/^Error:\s*/i, '');
