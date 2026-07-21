@@ -6,6 +6,7 @@ import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../components/AuthContext';
 import axiosClient from '../utils/axiosClient';
 import { EyeIcon, EyeOffIcon } from '../components/icons/EyeIcons';
+import { GoogleLogin } from '@react-oauth/google';
 
 const loginSchema = z.object({
   emailId: z.string().email("Invalid email"),
@@ -15,7 +16,7 @@ const loginSchema = z.object({
 function Login() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { refreshUser } = useAuth();
+  const { refreshUser, googleLogin } = useAuth();
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -39,44 +40,44 @@ function Login() {
       await refreshUser();
       navigate(redirectTarget);
     } catch (err) {
-      console.error('Login error:', err);
-      let rawErr = err.response?.data?.message || err.response?.data || err.message || 'Login failed. Invalid credentials.';
-      if (typeof rawErr === 'object') {
-        rawErr = JSON.stringify(rawErr);
-      }
-      let cleanMsg = 'Login failed. Invalid credentials.';
-      if (typeof rawErr === 'string') {
-        if (rawErr.toLowerCase().includes('network error') || rawErr.toLowerCase().includes('timeout')) {
-          cleanMsg = 'Server connection error. The server may be waking up from sleep (Render free tier). Please try clicking Login again in a few seconds.';
-        } else if (rawErr.trim().startsWith('<') || rawErr.includes('<!DOCTYPE html>')) {
-          cleanMsg = 'Server error or connection issue. Please try again.';
-        } else {
-          cleanMsg = rawErr.replace(/^Error:\s*/i, '');
-        }
-      }
-      setError(cleanMsg);
+      setError(err.response?.data || err.message || 'Login failed');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleSuccess = async (credentialResponse) => {
+    setError('');
+    setLoading(true);
+    try {
+      await googleLogin(credentialResponse.credential);
+      await refreshUser();
+      navigate(redirectTarget);
+    } catch (err) {
+      setError(err.response?.data || err.message || 'Google Login failed');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-zinc-50 dark:bg-zinc-950 font-sans py-12 transition-colors duration-200">
-      <div className="w-full max-w-md bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800/80 rounded-2xl p-8 shadow-xl mx-4">
-        <div>
-          <h2 className="text-3xl font-bold text-center tracking-tight text-zinc-900 dark:text-white mb-2">
-            CodeZen
-          </h2>
-          <p className="text-zinc-500 dark:text-zinc-400 text-sm text-center mb-6">
-            Sign in to access your coding challenges.
-          </p>
+    <div className="min-h-screen bg-zinc-50 dark:bg-[#09090b] flex items-center justify-center p-4 transition-colors duration-200">
+      <div className="w-full max-w-md">
+        <div className="text-center mb-8">
+          <Link to="/" className="inline-flex items-center gap-2 mb-4">
+            <div className="w-8 h-8 rounded-lg bg-cyan-600 flex items-center justify-center text-white font-bold text-lg shadow-sm">
+              C
+            </div>
+            <span className="font-bold text-xl text-zinc-900 dark:text-white tracking-tight">CodeZen</span>
+          </Link>
+          <h1 className="text-2xl font-bold text-zinc-900 dark:text-white tracking-tight">Welcome Back</h1>
+          <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">Sign in to your account to continue</p>
+        </div>
 
+        <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 md:p-8 shadow-sm">
           {error && (
-            <div className="bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900/50 text-red-600 dark:text-red-400 text-xs py-2.5 px-3.5 rounded-lg mb-5 flex items-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4.5 h-4.5 shrink-0">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
-              </svg>
-              <span>{error}</span>
+            <div className="mb-4 p-3 rounded-lg bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900/40 text-red-600 dark:text-red-400 text-xs font-medium">
+              {error}
             </div>
           )}
 
@@ -87,7 +88,8 @@ function Login() {
               </label>
               <input
                 {...register("emailId")}
-                placeholder="shakti@gmail.com"
+                type="email"
+                placeholder="you@example.com"
                 className="w-full bg-white dark:bg-zinc-950/50 border border-zinc-300 dark:border-zinc-800 rounded-lg py-2.5 px-3.5 text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-650 focus:outline-none focus:border-cyan-600 focus:ring-1 focus:ring-cyan-600 transition-colors text-sm"
               />
               {errors.emailId && (
@@ -142,6 +144,22 @@ function Login() {
               )}
             </button>
           </form>
+
+          <div className="my-5 flex items-center justify-center gap-2">
+            <div className="h-px bg-zinc-200 dark:bg-zinc-800 flex-1"></div>
+            <span className="text-xs text-zinc-400 dark:text-zinc-500 font-medium">OR</span>
+            <div className="h-px bg-zinc-200 dark:bg-zinc-800 flex-1"></div>
+          </div>
+
+          <div className="flex justify-center">
+            <GoogleLogin
+              onSuccess={handleGoogleSuccess}
+              onError={() => setError('Google Sign-In failed')}
+              useOneTap
+              theme="outline"
+              shape="rectangular"
+            />
+          </div>
 
           <p className="text-center text-xs text-zinc-500 dark:text-zinc-400 mt-6">
             Don't have an account?{' '}

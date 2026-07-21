@@ -187,6 +187,9 @@ const deleteProfile = async (req, res) => {
   }
 };
 
+const { OAuth2Client } = require('google-auth-library');
+const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
 const check = async (req, res) => {
   try {
     const user = req.result;
@@ -208,4 +211,61 @@ const check = async (req, res) => {
   }
 };
 
-module.exports = {register, login, logout, adminRegister, deleteProfile, check};
+// Google OAuth Login
+const googleLogin = async (req, res) => {
+  try {
+    const { credential } = req.body;
+
+    if (!credential) {
+      return res.status(400).send("Google credential is required");
+    }
+
+    const ticket = await googleClient.verifyIdToken({
+      idToken: credential,
+      audience: process.env.GOOGLE_CLIENT_ID
+    });
+
+    const payload = ticket.getPayload();
+    const { sub: googleId, email, given_name, family_name } = payload;
+
+    let user = await User.findOne({ $or: [{ googleId }, { emailId: email }] });
+
+    if (!user) {
+      user = await User.create({
+        firstName: given_name || "User",
+        lastName: family_name || "Google",
+        emailId: email,
+        googleId: googleId,
+        role: "user"
+      });
+    } else if (!user.googleId) {
+      user.googleId = googleId;
+      await user.save();
+    }
+
+    const reply = {
+      firstName: user.firstName,
+      lastName: user.lastName,
+      emailId: user.emailId,
+      role: user.role,
+      _id: user._id
+    };
+
+    const token = jwt.sign(
+      { _id: user._id, emailId: user.emailId, role: user.role },
+      process.env.JWT_KEY,
+      { expiresIn: 60 * 60 }
+    );
+
+    res.cookie("token", token, cookieOptions);
+
+    res.status(200).json({
+      user: reply,
+      message: "Logged in with Google successfully"
+    });
+  } catch (err) {
+    res.status(400).send("Google authentication error: " + err.message);
+  }
+};
+
+module.exports = {register, login, logout, adminRegister, deleteProfile, check, googleLogin};

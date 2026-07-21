@@ -34,7 +34,11 @@ const userSchema = new Schema({
     },
     password: {
         type: String,
-        required: true
+        required: function() { return !this.googleId; }
+    },
+    googleId: {
+        type: String,
+        sparse: true
     },
     problemSolved: [{
         type: Schema.Types.ObjectId,

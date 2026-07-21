@@ -36,8 +36,16 @@ export function AuthProvider({ children }) {
     refreshUser();
   }, []);
 
+  const googleLogin = async (credential) => {
+    const response = await axiosClient.post('/user/google', { credential });
+    if (response.data && response.data.user) {
+      setUser(response.data.user);
+    }
+    return response.data;
+  };
+
   return (
-    <AuthContext.Provider value={{ user, setUser, loading, refreshUser, logout }}>
+    <AuthContext.Provider value={{ user, setUser, loading, refreshUser, logout, googleLogin }}>
       {children}
     </AuthContext.Provider>
   );

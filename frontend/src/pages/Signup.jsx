@@ -3,8 +3,10 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
+import { useAuth } from '../components/AuthContext';
 import axiosClient from '../utils/axiosClient';
 import { EyeIcon, EyeOffIcon } from '../components/icons/EyeIcons';
+import { GoogleLogin } from '@react-oauth/google';
 
 const signupSchema = z.object({
   firstName: z.string().min(3, "First name should contain at least 3 letters."),
@@ -16,6 +18,7 @@ const signupSchema = z.object({
 function Signup() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { refreshUser, googleLogin } = useAuth();
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -37,22 +40,21 @@ function Signup() {
       await axiosClient.post('/user/register', data);
       navigate(redirectTarget !== '/' ? `/login?redirect=${encodeURIComponent(redirectTarget)}` : '/login');
     } catch (err) {
-      console.error('Signup error:', err);
-      let rawErr = err.response?.data?.message || err.response?.data || err.message || 'Registration failed';
-      if (typeof rawErr === 'object') {
-        rawErr = JSON.stringify(rawErr);
-      }
-      let cleanMsg = 'Registration failed';
-      if (typeof rawErr === 'string') {
-        if (rawErr.toLowerCase().includes('network error') || rawErr.toLowerCase().includes('timeout')) {
-          cleanMsg = 'Server connection error. The server may be waking up from sleep (Render free tier). Please try clicking Sign Up again in a few seconds.';
-        } else if (rawErr.trim().startsWith('<') || rawErr.includes('<!DOCTYPE html>')) {
-          cleanMsg = 'Server error or connection issue. Please try again.';
-        } else {
-          cleanMsg = rawErr.replace(/^Error:\s*/i, '');
-        }
-      }
-      setError(cleanMsg);
+      setError(err.response?.data || err.message || 'Registration failed');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleSuccess = async (credentialResponse) => {
+    setError('');
+    setLoading(true);
+    try {
+      await googleLogin(credentialResponse.credential);
+      await refreshUser();
+      navigate(redirectTarget);
+    } catch (err) {
+      setError(err.response?.data || err.message || 'Google Auth failed');
     } finally {
       setLoading(false);
     }
@@ -176,6 +178,22 @@ function Signup() {
               )}
             </button>
           </form>
+
+          <div className="my-5 flex items-center justify-center gap-2">
+            <div className="h-px bg-zinc-200 dark:bg-zinc-800 flex-1"></div>
+            <span className="text-xs text-zinc-400 dark:text-zinc-500 font-medium">OR</span>
+            <div className="h-px bg-zinc-200 dark:bg-zinc-800 flex-1"></div>
+          </div>
+
+          <div className="flex justify-center">
+            <GoogleLogin
+              onSuccess={handleGoogleSuccess}
+              onError={() => setError('Google Sign-In failed')}
+              useOneTap
+              theme="outline"
+              shape="rectangular"
+            />
+          </div>
 
           <p className="text-center text-xs text-zinc-500 dark:text-zinc-400 mt-6">
             Already have an account?{' '}
