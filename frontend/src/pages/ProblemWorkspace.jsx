@@ -23,6 +23,45 @@ function ProblemWorkspace() {
   const [submitResult, setSubmitResult] = useState(null);
   const [activeResultTab, setActiveResultTab] = useState(0);
   const [viewMode, setViewMode] = useState('description');
+  
+  // AI Assistant states
+  const [leftTab, setLeftTab] = useState('description'); // 'description' | 'ai'
+  const [aiMessages, setAiMessages] = useState([
+    { sender: 'ai', text: 'Hello! I am your CodeZen AI Assistant. How can I help you with this problem?' }
+  ]);
+  const [aiInput, setAiInput] = useState('');
+  const [aiLoading, setAiLoading] = useState(false);
+
+  const handleSendAiMessage = async (customMsg) => {
+    const textToSend = customMsg || aiInput;
+    if (!textToSend.trim() || aiLoading) return;
+
+    const newMessages = [...aiMessages, { sender: 'user', text: textToSend }];
+    setAiMessages(newMessages);
+    if (!customMsg) setAiInput('');
+    setAiLoading(true);
+
+    try {
+      const res = await axiosClient.post('/ai/chat', {
+        message: textToSend,
+        code,
+        language: selectedLanguage,
+        problemTitle: problem?.title,
+        problemDescription: problem?.description,
+        runResult,
+        submitResult
+      });
+
+      const reply = res.data?.reply || res.data?.message || 'AI assistant processed your request.';
+      setAiMessages([...newMessages, { sender: 'ai', text: reply }]);
+    } catch (err) {
+      console.error('AI Chat Error:', err);
+      const errorMsg = err.response?.data?.message || err.response?.data || 'Failed to reach AI Assistant. Please log in to chat.';
+      setAiMessages([...newMessages, { sender: 'ai', text: `⚠️ ${typeof errorMsg === 'string' ? errorMsg : JSON.stringify(errorMsg)}` }]);
+    } finally {
+      setAiLoading(false);
+    }
+  };
 
   useEffect(() => {
     const fetchProblem = async () => {
@@ -208,53 +247,160 @@ function ProblemWorkspace() {
       {/* Split Panels Workspace */}
       <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
         
-        {/* Left Panel - Description */}
+        {/* Left Panel - Description & AI Assistant */}
         <div className="w-full md:w-1/2 border-r border-zinc-900 flex flex-col bg-[#09090b] overflow-y-auto">
-          <div className="border-b border-zinc-900 h-10 shrink-0 flex items-center px-4 bg-zinc-900/10">
-            <span className="text-[10px] font-bold text-white uppercase tracking-wider border-b-2 border-cyan-500 py-2.5">
+          <div className="border-b border-zinc-900 h-10 shrink-0 flex items-center px-4 bg-zinc-900/20 gap-4">
+            <button
+              type="button"
+              onClick={() => setLeftTab('description')}
+              className={`text-[10px] font-bold uppercase tracking-wider py-2.5 transition-colors cursor-pointer border-b-2 ${
+                leftTab === 'description'
+                  ? 'text-white border-cyan-500'
+                  : 'text-zinc-500 border-transparent hover:text-zinc-300'
+              }`}
+            >
               Description
-            </span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setLeftTab('ai')}
+              className={`text-[10px] font-bold uppercase tracking-wider py-2.5 transition-colors cursor-pointer flex items-center gap-1.5 border-b-2 ${
+                leftTab === 'ai'
+                  ? 'text-cyan-400 border-cyan-500'
+                  : 'text-zinc-500 border-transparent hover:text-cyan-400'
+              }`}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-3.5 h-3.5 text-cyan-400">
+                <path fillRule="evenodd" d="M9 4.5a.75.75 0 0 1 .721.544l.813 2.846a3.75 3.75 0 0 0 2.576 2.576l2.846.813a.75.75 0 0 1 0 1.442l-2.846.813a3.75 3.75 0 0 0-2.576 2.576l-.813 2.846a.75.75 0 0 1-1.442 0l-.813-2.846a3.75 3.75 0 0 0-2.576-2.576l-2.846-.813a.75.75 0 0 1 0-1.442l2.846-.813A3.75 3.75 0 0 0 7.43 7.93l.813-2.846A.75.75 0 0 1 9 4.5ZM18 1.5a.75.75 0 0 1 .728.568l.258.906a1.5 1.5 0 0 0 1.04 1.04l.906.258a.75.75 0 0 1 0 1.456l-.906.258a1.5 1.5 0 0 0-1.04 1.04l-.258.906a.75.75 0 0 1-1.456 0l-.258-.906a1.5 1.5 0 0 0-1.04-1.04l-.906-.258a.75.75 0 0 1 0-1.456l.906-.258a1.5 1.5 0 0 0 1.04-1.04l.258-.906A.75.75 0 0 1 18 1.5Z" clipRule="evenodd" />
+              </svg>
+              AI Assistant
+            </button>
           </div>
 
-          <div className="p-6 space-y-6">
-            <div>
-              <h2 className="text-lg font-bold text-white mb-2">{problem.title}</h2>
-              <div className="flex flex-wrap items-center gap-2">
-                <span className={`badge border text-[10px] px-2 py-0.5 font-bold rounded-md capitalize ${diffColorClass}`}>
-                  {problem.difficulty}
-                </span>
-                
-                <div className="flex gap-1">
-                  {problem.tags?.map((tag) => (
-                    <span key={tag} className="text-[9px] font-bold bg-zinc-900 border border-zinc-800 text-zinc-500 px-1.5 py-0.5 rounded uppercase">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            <div className="text-xs leading-relaxed text-zinc-350 whitespace-pre-wrap font-sans border-t border-zinc-900 pt-5">
-              {problem.description}
-            </div>
-
-            {/* Examples */}
-            <div className="space-y-3.5 border-t border-zinc-900 pt-5">
-              <h4 className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider">Examples</h4>
-              {problem.visibleTestCases?.map((tc, idx) => (
-                <div key={idx} className="bg-zinc-900/10 border border-zinc-900 rounded-xl p-4 space-y-2 text-[11px]">
-                  <span className="font-bold text-cyan-500 block">Example {idx + 1}:</span>
-                  <div className="grid grid-cols-1 gap-1 font-mono text-zinc-400">
-                    <div><span className="text-zinc-600 font-bold">Input:</span> {tc.input}</div>
-                    <div><span className="text-zinc-600 font-bold">Output:</span> {tc.output}</div>
-                    {tc.explanation && (
-                      <div className="mt-1 leading-relaxed"><span className="text-zinc-600 font-bold">Explanation:</span> {tc.explanation}</div>
-                    )}
+          {leftTab === 'description' ? (
+            <div className="p-6 space-y-6">
+              <div>
+                <h2 className="text-lg font-bold text-white mb-2">{problem.title}</h2>
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className={`badge border text-[10px] px-2 py-0.5 font-bold rounded-md capitalize ${diffColorClass}`}>
+                    {problem.difficulty}
+                  </span>
+                  
+                  <div className="flex gap-1">
+                    {problem.tags?.map((tag) => (
+                      <span key={tag} className="text-[9px] font-bold bg-zinc-900 border border-zinc-800 text-zinc-500 px-1.5 py-0.5 rounded uppercase">
+                        {tag}
+                      </span>
+                    ))}
                   </div>
                 </div>
-              ))}
+              </div>
+
+              <div className="text-xs leading-relaxed text-zinc-350 whitespace-pre-wrap font-sans border-t border-zinc-900 pt-5">
+                {problem.description}
+              </div>
+
+              {/* Examples */}
+              <div className="space-y-3.5 border-t border-zinc-900 pt-5">
+                <h4 className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider">Examples</h4>
+                {problem.visibleTestCases?.map((tc, idx) => (
+                  <div key={idx} className="bg-zinc-900/10 border border-zinc-900 rounded-xl p-4 space-y-2 text-[11px]">
+                    <span className="font-bold text-cyan-500 block">Example {idx + 1}:</span>
+                    <div className="grid grid-cols-1 gap-1 font-mono text-zinc-400">
+                      <div><span className="text-zinc-600 font-bold">Input:</span> {tc.input}</div>
+                      <div><span className="text-zinc-600 font-bold">Output:</span> {tc.output}</div>
+                      {tc.explanation && (
+                        <div className="mt-1 leading-relaxed"><span className="text-zinc-600 font-bold">Explanation:</span> {tc.explanation}</div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
+          ) : (
+            /* AI Assistant Chat UI */
+            <div className="flex-1 flex flex-col h-full overflow-hidden p-4 space-y-3 bg-zinc-950/40">
+              <div className="flex-1 overflow-y-auto space-y-3 p-2 font-sans text-xs">
+                {aiMessages.map((msg, idx) => (
+                  <div
+                    key={idx}
+                    className={`flex flex-col ${msg.sender === 'user' ? 'items-end' : 'items-start'}`}
+                  >
+                    <span className="text-[9px] font-bold text-zinc-500 mb-1 uppercase tracking-wider">
+                      {msg.sender === 'user' ? 'You' : 'CodeZen AI'}
+                    </span>
+                    <div
+                      className={`max-w-[85%] rounded-xl px-3.5 py-2.5 text-xs leading-relaxed whitespace-pre-wrap ${
+                        msg.sender === 'user'
+                          ? 'bg-cyan-600 text-white font-medium shadow-md'
+                          : 'bg-zinc-900 border border-zinc-800 text-zinc-200'
+                      }`}
+                    >
+                      {msg.text}
+                    </div>
+                  </div>
+                ))}
+                {aiLoading && (
+                  <div className="flex items-center gap-2 text-zinc-400 text-xs py-2 px-1">
+                    <span className="loading loading-dots loading-xs text-cyan-400"></span>
+                    <span>AI is analyzing your code & request...</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Quick AI Prompt Chips */}
+              <div className="flex flex-wrap gap-1.5 pt-2 border-t border-zinc-900">
+                <button
+                  type="button"
+                  onClick={() => handleSendAiMessage('Can you give me a hint on how to approach this problem?')}
+                  disabled={aiLoading}
+                  className="text-[10px] font-semibold bg-zinc-900 hover:bg-zinc-800 text-cyan-400 border border-zinc-800 px-2.5 py-1 rounded-full transition-colors cursor-pointer"
+                >
+                  💡 Give Hint
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleSendAiMessage('Please check my current code for any bugs or edge cases.')}
+                  disabled={aiLoading}
+                  className="text-[10px] font-semibold bg-zinc-900 hover:bg-zinc-800 text-amber-400 border border-zinc-800 px-2.5 py-1 rounded-full transition-colors cursor-pointer"
+                >
+                  🐛 Debug Code
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleSendAiMessage('How can I optimize the time and space complexity of my solution?')}
+                  disabled={aiLoading}
+                  className="text-[10px] font-semibold bg-zinc-900 hover:bg-zinc-800 text-teal-400 border border-zinc-800 px-2.5 py-1 rounded-full transition-colors cursor-pointer"
+                >
+                  ⚡ Optimize Complexity
+                </button>
+              </div>
+
+              {/* Input Bar */}
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  handleSendAiMessage();
+                }}
+                className="flex items-center gap-2 pt-1"
+              >
+                <input
+                  type="text"
+                  value={aiInput}
+                  onChange={(e) => setAiInput(e.target.value)}
+                  placeholder="Ask AI Assistant a question..."
+                  className="flex-1 bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2 text-xs text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-cyan-500 transition-colors"
+                />
+                <button
+                  type="submit"
+                  disabled={aiLoading || !aiInput.trim()}
+                  className="bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs px-3.5 py-2 rounded-lg transition-colors cursor-pointer disabled:opacity-40"
+                >
+                  Send
+                </button>
+              </form>
+            </div>
+          )}
         </div>
 
         {/* Right Panel - Code Editor */}
@@ -266,12 +412,12 @@ function ProblemWorkspace() {
               <select
                 value={selectedLanguage}
                 onChange={handleLanguageChange}
-                className="select select-ghost select-xs text-[10px] font-bold text-zinc-400 bg-transparent border-none focus:outline-none focus:ring-0 cursor-pointer uppercase tracking-wider"
+                className="bg-zinc-900 border border-zinc-800 text-zinc-200 text-xs font-bold rounded-md px-2.5 py-1 focus:outline-none focus:border-cyan-500 cursor-pointer uppercase tracking-wider"
               >
-                <option value="javascript">JavaScript</option>
-                <option value="python">Python</option>
-                <option value="c++">C++</option>
-                <option value="java">Java</option>
+                <option value="javascript" className="bg-zinc-900 text-zinc-200 py-1">JAVASCRIPT</option>
+                <option value="python" className="bg-zinc-900 text-zinc-200 py-1">PYTHON</option>
+                <option value="c++" className="bg-zinc-900 text-zinc-200 py-1">C++</option>
+                <option value="java" className="bg-zinc-900 text-zinc-200 py-1">JAVA</option>
               </select>
             </div>
 
