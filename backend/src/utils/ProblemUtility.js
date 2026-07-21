@@ -147,10 +147,18 @@ function buildDriverCode(languageId, code, testInput, funcName) {
         return `#include <iostream>
 #include <vector>
 #include <string>
+#include <sstream>
 #include <unordered_map>
 #include <unordered_set>
+#include <map>
+#include <set>
+#include <queue>
+#include <stack>
 #include <algorithm>
 #include <cctype>
+#include <climits>
+#include <cmath>
+#include <numeric>
 #include <type_traits>
 #include <tuple>
 

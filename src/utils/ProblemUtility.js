@@ -31,6 +31,8 @@ const submitBatch = async (submissions) => {
                 }
             );
             results.push(response.data);
+            
+            // Wait 1.1 seconds between requests to avoid RapidAPI rate limits (1 req/sec)
             await new Promise(resolve => setTimeout(resolve, 1100));
         }
         return results;
@@ -43,6 +45,7 @@ const submitBatch = async (submissions) => {
 function parseInput(inputStr) {
     if (!inputStr) return { vars: [], argNames: '' };
     
+    // Split input on commas that are followed by a variable assignment (e.g. ", target =")
     const assignmentRegex = /,(\s*)(?=[a-zA-Z_][a-zA-Z0-9_]*\s*=)/g;
     const rawAssignments = inputStr.split(assignmentRegex).filter(s => s && s.trim().length > 0 && s.includes('='));
     
@@ -144,10 +147,18 @@ function buildDriverCode(languageId, code, testInput, funcName) {
         return `#include <iostream>
 #include <vector>
 #include <string>
+#include <sstream>
 #include <unordered_map>
 #include <unordered_set>
+#include <map>
+#include <set>
+#include <queue>
+#include <stack>
 #include <algorithm>
 #include <cctype>
+#include <climits>
+#include <cmath>
+#include <numeric>
 #include <type_traits>
 #include <tuple>
 
