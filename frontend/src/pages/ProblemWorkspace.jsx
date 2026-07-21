@@ -26,7 +26,7 @@ function ProblemWorkspace() {
   const [activeTestcaseTab, setActiveTestcaseTab] = useState(0);
 
   // AI Assistant states
-  const [showAi, setShowAi] = useState(true);
+  const [showAi, setShowAi] = useState(false);
   const [aiMessages, setAiMessages] = useState([
     {
       sender: 'ai',
