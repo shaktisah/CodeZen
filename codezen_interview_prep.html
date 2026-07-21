@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeZen - Interview Q&A Cheat Sheet</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --primary: #4F46E5;
+            --primary-hover: #4338CA;
+            --text-main: #1F2937;
+            --text-muted: #4B5563;
+            --bg-page: #F9FAFB;
+            --bg-card: #FFFFFF;
+            --border: #E5E7EB;
+            --accent: #10B981;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            margin: 0;
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 20px;
+        }
+
+        header h1 {
+            color: var(--primary);
+            font-size: 2.2rem;
+            margin: 0 0 10px 0;
+            font-weight: 700;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin: 0;
+        }
+
+        .metadata {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            color: var(--primary);
+            margin-top: 30px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--primary);
+            padding-left: 10px;
+            font-weight: 600;
+        }
+
+        .qa-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            page-break-inside: avoid;
+        }
+
+        .question {
+            font-weight: 600;
+            font-size: 1.05rem;
+            color: var(--text-main);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .question-num {
+            background-color: #EEF2FF;
+            color: var(--primary);
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-size: 0.8rem;
+            margin-right: 10px;
+            font-weight: 700;
+            margin-top: 3px;
+        }
+
+        .answer {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-left: 36px;
+        }
+
+        .answer strong {
+            color: var(--text-main);
+        }
+
+        .btn-print {
+            display: block;
+            width: fit-content;
+            margin: 0 auto 30px auto;
+            background-color: var(--primary);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2);
+            transition: background-color 0.2s;
+        }
+
+        .btn-print:hover {
+            background-color: var(--primary-hover);
+        }
+
+        @media print {
+            body {
+                background-color: white;
+                padding: 0;
+            }
+            .btn-print {
+                display: none;
+            }
+            .qa-card {
+                box-shadow: none;
+                border: 1px solid #D1D5DB;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <button class="btn-print" onclick="window.print()">🖨️ Save as PDF / Print</button>
+    
+    <header>
+        <h1>CodeZen Interview Cheat Sheet</h1>
+        <p>20 High-Quality Questions & Short Answers</p>
+        <div class="metadata">Prepared for: Shakti Kumar Sah • KIIT University</div>
+    </header>
+
+    <!-- Section 1 -->
+    <div class="section-title">🤖 AI Tutor Integration (Gemini API)</div>
+    
+    <div class="qa-card">
+        <div class="question">
+            <span class="question-num">Q1</span>
+            How did you integrate Gemini and force it to act as a tutor?
+        </div>
+        <div class="answer">
+            I integrated the Gemini API on the backend. By writing a detailed <strong>System Prompt</strong> that wraps the user's code and execution errors, I forced the model to only output <strong>hints, dry-run checklists, and complexity advice</strong>, explicitly forbidding it from printing the full solution.
+        </div>
+    </div>
+
+    <div class="qa-card">
+        <div class="question">
+            <span class="question-num">Q2</span>
+            What happens if the Gemini API goes offline or fails?
+        </div>
+        <div class="answer">
+            I built an <strong>offline fallback mechanism</strong>. If the API fails, the backend locally parses the compiler logs and outputs a static, rule-based debugging checklist depending on whether it's a Compilation Error, Runtime Error, or Wrong Answer.
+        </div>
+    </div>
+
+    <div class="qa-card">
+        <div class="question">
+            <span class="question-num">Q3</span>
+            What parameters does the backend send to the Gemini API controller?
+        </div>
+        <div class="answer">
+            The frontend payload sends the user's active code, the current language, the problem title, the problem description, previous conversation history (for continuity), and the compiler's exit/run status.
+        </div>
+    </div>
+
+    <div class="qa-card">
+        <div class="question">
+            <span class="question-num">Q4</span>
+            How does the AI analyze space and time complexity?
+        </div>
+        <div class="answer">
+            The system prompt instructs Gemini to review loop structures and variables in the user's code, estimate the worst-case complexities in Big O notation, and prompt the candidate to optimize nested loops or high memory allocations.
+        </div>
+    </div>
+
+    <!-- Section 2 -->
+    <div class="section-title">💻 Code Evaluation & Sandboxing</div>
+
+    <div class="qa-card">
+        <div class="question">
+            <span class="question-num">Q5</span>
+            How do you execute user code safely?
+        </div>
+        <div class="answer">
+            To prevent security breaches (like system access or infinite loops), we never run code locally. Instead, we offload execution to a <strong>remote compiler sandbox</strong> (OneCompiler via RapidAPI) which executes the code in isolation and returns output logs safely.
+        </div>
+    </div>
+
+    <div class="qa-card">
+        <div class="question">
+            <span class="question-num">Q6</span>
+            How are inputs parsed and fed into the user's functions?
+        </div>
+        <div class="answer">
+            Before sending the code, the backend automatically wraps it with <strong>language-specific runner templates</strong>. It parses the inputs from MongoDB and dynamically writes driver code (like <code>int main()</code> in C++ or main classes in Java) to execute the target function.
+        </div>
+    </div>
+
+    <div class="qa-card">
+        <div class="question">
+            <span class="question-num">Q7</span>
+            How did you bypass RapidAPI's 1-request-per-second limit?
+        </div>
+        <div class="answer">
+            I implemented an <strong>asynchronous sequential delay queue</strong>. When executing a batch of test cases, the system introduces a <code>1.1-second</code> sleep delay between each test case request, ensuring we never trigger rate limits.
+        </div>
+    </div>
+
+    <div class="qa-card">
+        <div class="question">
+            <span class="question-num">Q8</span>
+            How are the user's execution run logs compared with target test cases?
+        </div>
+        <div class="answer">
+            We capture stdout from the remote execution result, strip trailing whitespace and carriage returns, and perform a strict string comparison with the expected outputs stored in MongoDB.
+        </div>
+    </div>
+
+    <!-- Section 3 -->
+    <div class="section-title">⚡ Authentication & Session Security (Redis)</div>
+
+    <div class="qa-card">
+        <div class="question">
+            <span class="question-num">Q9</span>
+            Why did you use Redis for token blacklisting?
+        </div>
+        <div class="answer">
+            JWT tokens are stateless and cannot be revoked by the server once issued. To support secure logouts, we store logged-out token signatures in <strong>Redis</strong>, blocking any hijacked requests using that token.
+        </div>
+    </div>
+
+    <div class="qa-card">
+        <div class="question">
+            <span class="question-num">Q10</span>
+            How do you optimize Redis memory usage for blacklisted tokens?
+        </div>
+        <div class="answer">
+            Every blacklisted token is saved with a <strong>Time-to-Live (TTL)</strong> parameter matching the exact remaining expiration time of the JWT. Once the token naturally expires, Redis automatically purges it, keeping RAM usage extremely low.
+        </div>
+    </div>
+
+    <div class="qa-card">
+        <div class="question">
+            <span class="question-num">Q11</span>
+            How does the JWT verification middleware work?
+        </div>
+        <div class="answer">
+            It intercepts incoming requests, extracts the token from the <code>Authorization</code> header, verifies its integrity using our secret key, and queries Redis. If the token key exists in Redis, the request is rejected with a <code>401 Unauthorized</code> status.
+        </div>
+    </div>
+
+    <div class="qa-card">
+        <div class="question">
+            <span class="question-num">Q12</span>
+            How do you protect MongoDB queries against NoSQL injection?
+        </div>
+        <div class="answer">
+            By utilizing the <strong>Mongoose ODM</strong>. Mongoose enforces strict schema definitions and sanitizes query input automatically, casting values to match schema types (such as casting strings to ObjectIDs), preventing query injection.
+        </div>
+    </div>
+
+    <!-- Section 4 -->
+    <div class="section-title">📦 Database & State Management</div>
+
+    <div class="qa-card">
+        <div class="question">
+            <span class="question-num">Q13</span>
+            Why choose MongoDB instead of a SQL database like MySQL?
+        </div>
+        <div class="answer">
+            Coding challenges require flexible schema structures to handle multiple language templates, variables, and arrays of test cases. MongoDB's <strong>document model</strong> allows us to store all this nested data inside a single document without complex joins.
+        </div>
+    </div>
+
+    <div class="qa-card">
+        <div class="question">
+            <span class="question-num">Q14</span>
+            How did you handle CORS issues in local development?
+        </div>
+        <div class="answer">
+            I configured <strong>Vite's reverse proxy</strong> on the frontend to map all <code>/api</code> requests to the Express port (4000). This tricks the browser into believing all requests originate from the same port, bypassing CORS policies cleanly.
+        </div>
+    </div>
+
+    <div class="qa-card">
+        <div class="question">
+            <span class="question-num">Q15</span>
+            How did you display user statistics on the Profile page?
+        </div>
+        <div class="answer">
+            I used MongoDB aggregation pipelines to group all submissions by user ID and status. This allowed us to calculate totals, display accuracy rates, and render progress bars based on difficulty levels (Easy, Medium, Hard).
+        </div>
+    </div>
+
+    <div class="qa-card">
+        <div class="question">
+            <span class="question-num">Q16</span>
+            How does the Admin challenge form handle starter code?
+        </div>
+        <div class="answer">
+            It provides fields to enter initial code setups for multiple languages (JS, Python, Java, C++). These templates are stored inside a <code>startCode</code> subdocument array inside MongoDB, which is fetched dynamically when a user loads a problem.
+        </div>
+    </div>
+
+    <div class="qa-card">
+        <div class="question">
+            <span class="question-num">Q17</span>
+            What is Redux Toolkit and how did you use it?
+        </div>
+        <div class="answer">
+            Redux Toolkit is a high-level library for global state management. In our app, it stores auth status, user metadata, active filters, and loading states, ensuring consistency across the Workspace, Profile, and Admin Panel.
+        </div>
+    </div>
+
+    <div class="qa-card">
+        <div class="question">
+            <span class="question-num">Q18</span>
+            How does the sidebar filtering logic work on the backend?
+        </div>
+        <div class="answer">
+            The frontend appends query variables (difficulty, tags, search queries) to the API request. The Express controller extracts these query parameters and builds a dynamic MongoDB query object using operators like <code>$regex</code> and exact matches.
+        </div>
+    </div>
+
+    <!-- Section 5 -->
+    <div class="section-title">🚀 Scalability & Deployment</div>
+
+    <div class="qa-card">
+        <div class="question">
+            <span class="question-num">Q19</span>
+            How did you deploy the frontend and backend?
+        </div>
+        <div class="answer">
+            The frontend is deployed on <strong>Vercel</strong> for fast global delivery and automatic builds. The backend API is hosted on a cloud provider with MongoDB Atlas as the managed cloud database.
+        </div>
+    </div>
+
+    <div class="qa-card">
+        <div class="question">
+            <span class="question-num">Q20</span>
+            If the system scales to millions of users, how would you redesign the code runner?
+        </div>
+        <div class="answer">
+            I would introduce a <strong>Message Queue</strong> (like RabbitMQ or Apache Kafka) between the Express backend and the runner. Submissions would be queued, and a pool of independent, auto-scaling worker nodes would pull from the queue to process them asynchronously.
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

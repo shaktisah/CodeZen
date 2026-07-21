@@ -10,7 +10,7 @@ async function seed() {
     await main();
     console.log("Connected to MongoDB successfully!");
 
-    // 1. Find or create an admin user
+   
     let admin = await User.findOne({ role: 'admin' });
     if (!admin) {
       const hashedPassword = await bcrypt.hash('adminpassword123', 10);
@@ -27,7 +27,7 @@ async function seed() {
       console.log(`Found existing admin user: ${admin.emailId}`);
     }
 
-    // 2. Create sample Two Sum problem if it doesn't exist
+ 
     const existingProblem = await Problem.findOne({ title: 'Two Sum' });
     if (!existingProblem) {
       const sampleProblem = await Problem.create({

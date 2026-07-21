@@ -1,8 +1,6 @@
 import React from 'react';
 
-/**
- * EyeIcon displays the open eye SVG, representing "Show Password".
- */
+
 export function EyeIcon({ className = "w-5 h-5", ...props }) {
   return (
     <svg
@@ -28,9 +26,7 @@ export function EyeIcon({ className = "w-5 h-5", ...props }) {
   );
 }
 
-/**
- * EyeOffIcon displays the crossed-out eye SVG, representing "Hide Password".
- */
+
 export function EyeOffIcon({ className = "w-5 h-5", ...props }) {
   return (
     <svg

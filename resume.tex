@@ -1,0 +1,149 @@
+\documentclass[letterpaper,10pt]{article}
+
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage{tabularx}
+\usepackage{fontawesome5}
+\usepackage{multicol}
+\input{glyphtounicode}
+
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Balanced margins to fit exactly one full, rich page
+\addtolength{\oddsidemargin}{-0.6in}
+\addtolength{\evensidemargin}{-0.5in}
+\addtolength{\textwidth}{1.2in}
+\addtolength{\topmargin}{-0.8in}
+\addtolength{\textheight}{1.3in}
+
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+
+% Standard section headers spacing
+\titleformat{\section}{
+  \vspace{-10pt}\scshape\raggedright\large\bfseries
+}{}{0em}{}[\titlerule\vspace{-4pt}]
+
+% --------- COMMANDS ----------
+\newcommand{\resumeItem}[1]{\item\small{#1}}
+
+\newcommand{\resumeSubheading}[4]{
+\item
+\begin{tabular*}{\textwidth}{l@{\extracolsep{\fill}}r}
+\textbf{#1} & #2 \\
+\textit{#3} & \textit{#4} \\
+\end{tabular*}\vspace{-2pt}
+}
+
+\newcommand{\resumeItemListStart}{\begin{itemize}[noitemsep, topsep=1pt, partopsep=0pt, parsep=0pt, leftmargin=0.15in]}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-1pt}}
+
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.0in, label={}, noitemsep, topsep=0pt, partopsep=0pt]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+
+% -------- DOCUMENT START --------
+\begin{document}
+
+% HEADING
+\begin{center}
+{\Huge \textbf{SHAKTI KUMAR SAH}}\\
+\vspace{4pt}
+\small
+\faPhone* \, +91 7643938056 \quad|\quad 
+\faEnvelope \, \href{mailto:shaktisah871@gmail.com}{shaktisah871@gmail.com} \quad|\quad 
+\faLinkedin \, \href{https://linkedin.com/in/shakti-kumar-sah}{linkedin.com/in/shakti-kumar-sah} \quad|\quad 
+\faGithub \, \href{https://github.com/shaktisah}{github.com/shaktisah}
+\end{center}
+
+\vspace{-10pt}
+
+% EDUCATION
+\section{Education}
+\resumeSubHeadingListStart
+
+\resumeSubheading
+{KIIT Deemed to be University}{Bhubaneswar, India}
+{B.Tech in Computer Science and Engineering (7th Semester) \textnormal{\textbar{} CGPA: 8.48 / 10}}{2023 -- 2027}
+
+\resumeSubheading
+{Alpine Secondary School}{Birgunj, Nepal}
+{Intermediate in Science \textnormal{\textbar{} GPA: 3.20 / 4.0}}{2021 -- 2023}
+
+\resumeSubheading
+{Shree Maisthan Vidyapeeth Madhyamik Vidyalaya}{Birgunj, Nepal}
+{Matriculation \textnormal{\textbar{} GPA: 3.85 / 4.0}}{2021}
+
+\resumeSubHeadingListEnd
+
+% PROJECTS
+\section{Projects}
+\resumeSubHeadingListStart
+
+\resumeSubheading
+{CodeZen | Full-Stack Online Judge \& AI Tutor}{React, Node.js, Express, MongoDB, Redis, Gemini API}
+{Live: \href{https://code-zen-five.vercel.app/}{https://code-zen-five.vercel.app/}}{}
+\resumeItemListStart
+\resumeItem{Architected a LeetCode-style code-execution engine supporting JS, Python, C++, and Java execution via compiler sandboxes.}
+\resumeItem{Integrated Gemini API with custom prompts to serve as an interactive tutor, guiding users via hints rather than solutions.}
+\resumeItem{Implemented JWT authentication secured by Redis token blacklisting on user logout with TTL expiration limits.}
+\resumeItem{Designed an admin dashboard for challenge CRUD operations, test cases, and user submission logs.}
+\resumeItemListEnd
+
+\resumeSubheading
+{LeetCode AI Helper (Chrome Extension)}{React, Groq API, JavaScript, Chrome API}
+{GitHub: \href{https://github.com/shaktisah}{github.com/shaktisah}}{}
+\resumeItemListStart
+\resumeItem{Developed a React Chrome extension injecting AI-powered debugging tips directly into LeetCode panels.}
+\resumeItem{Integrated Groq API (Llama 3) to process code and generate contextual explanations in under 200ms.}
+\resumeItem{Utilized Chrome Storage API to securely persist user configuration preferences and custom API key tokens locally.}
+\resumeItemListEnd
+
+\resumeSubheading
+{Bus Booking Web App (RedBus Clone)}{React, JavaScript, HTML, CSS, Tailwind CSS}
+{Live: \href{https://redbus-web.vercel.app/}{https://redbus-web.vercel.app/}}{}
+\resumeItemListStart
+\resumeItem{Built a responsive bus booking UI with interactive seat selection, multi-criteria filtering, and route search.}
+\resumeItem{Engineered reusable React components and managed global state using React Context API.}
+\resumeItem{Simulated seamless checkout flows and dynamic seat allocation using local mock databases to speed up response times.}
+\resumeItemListEnd
+
+\resumeSubHeadingListEnd
+
+% SKILLS
+\section{Technical Skills}
+\begin{itemize}[leftmargin=0.15in, label={}, noitemsep, topsep=1pt, partopsep=0pt]
+\item \textbf{Languages:} C++, JavaScript, Python, SQL, C
+\item \textbf{Frontend:} React.js, Next.js, HTML5, CSS3, Tailwind CSS, Bootstrap
+\item \textbf{Backend:} Node.js, Express.js, RESTful APIs
+\item \textbf{Databases:} MongoDB (Mongoose ODM), MySQL, Redis (Caching)
+\item \textbf{Tools:} Git, GitHub, VS Code, Postman, Vercel
+\item \textbf{Core Academics:} Data Structures \& Algorithms (DSA), Object-Oriented Programming (OOP), DBMS, Computer Networks
+\end{itemize}
+
+% ACHIEVEMENTS
+\section{Achievements}
+\begin{itemize}[leftmargin=0.15in, noitemsep, topsep=1pt, partopsep=0pt]
+\item Solved \textbf{300+} Data Structures and Algorithms (DSA) problems across LeetCode and GeeksforGeeks.
+\item Participated in the KIIT KONVERGE Hackathon, collaborating in a team of 4 to design a real-time web portal.
+\item Conducted academic research on DDoS attack detection using Machine Learning models (Random Forest) for anomaly classification.
+\item Finished in top brackets of internal programming assessments.
+\end{itemize}
+
+% CERTIFICATIONS
+\section{Certifications}
+\begin{itemize}[leftmargin=0.15in, noitemsep, topsep=1pt, partopsep=0pt]
+\item Database Management System (DBMS) Certification -- NPTEL (IIT Kharagpur)
+\item KIIT Hackathon Participation Certificate
+\end{itemize}
+
+\end{document}

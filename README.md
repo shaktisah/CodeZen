@@ -1,100 +1,175 @@
-# 💻 CodeZen: Interactive Coding Platform & AI Tutor
+# 🚀 CodeZen – AI-Powered Coding Platform
 
-CodeZen is a modern, full-stack online judge platform (like LeetCode) designed for developers to solve coding challenges, compile/run their code in real-time, and get step-by-step guidance from an AI Coding Assistant.
+CodeZen is a full-stack coding platform inspired by LeetCode that enables developers to solve programming challenges, execute code in real time, and receive intelligent guidance from an AI-powered coding tutor.
 
----
+## ✨ Features
 
-## 🌟 Key Features
+### 📝 Online Coding Environment
 
-*   **Online Code Judge**: Code execution in JavaScript, Python, C++, and Java (uses remote code compiler runner).
-*   **🤖 AI Coding Assistant**: Side-by-side interactive chat powered by Gemini API to provide hints, explain complexity, and point out logical bugs without revealing direct solutions (following tutoring best practices).
-*   **Mock Execution & Submissions**: Ability to run code on sample test cases or submit code to check against hidden test cases.
-*   **Admin Dashboard**: Dedicated portal for administrators to create, update, and delete coding problems, test cases, and starter templates.
-*   **User Profiles & Statistics**: Tracking solved challenges, submissions history, and performance stats.
-*   **Secure Authentication**: JWT-based session security with token blacklisting using Redis.
+* Solve coding challenges directly in the browser.
+* Supports JavaScript, Python, C++, and Java.
+* Run code against sample test cases.
+* Submit solutions against hidden test cases.
 
----
+### 🤖 AI Coding Tutor
 
-## 🛠️ Tech Stack
+* Powered by Google Gemini AI.
+* Provides hints instead of direct answers.
+* Explains algorithms, time complexity, and debugging strategies.
+* Encourages problem-solving and interview-style thinking.
 
-| Component | Technology |
-| :--- | :--- |
-| **Frontend** | React, Vite, Tailwind CSS, DaisyUI, Axios, Redux Toolkit |
-| **Backend** | Node.js, Express.js |
-| **Database** | MongoDB (Mongoose ODM) |
-| **Caching/Session** | Redis (Token Blacklisting) |
-| **AI Integration** | Google Gemini API (`@google/generative-ai`) |
+### 🔐 Authentication & Security
 
----
+* JWT-based authentication.
+* Secure route protection.
+* Redis-powered token blacklisting for logout security.
 
-## 🚀 Quick Setup & Installation
+### 👨‍💼 Admin Dashboard
 
-### Prerequisites
-*   [Node.js](https://nodejs.org/) installed (v18 or higher)
-*   [MongoDB](https://www.mongodb.com/try/download/community) running locally (or MongoDB Atlas URI)
-*   [Redis](https://redis.io/) running locally (port `6379`)
+* Create, edit, and delete coding problems.
+* Manage test cases and starter code templates.
+* Monitor platform content efficiently.
 
----
+### 📊 User Analytics
 
-### Step 1: Clone & Configure Backend
-1. Open the `/backend` directory.
-2. Create a `.env` file (copying the structure below):
-   ```env
-   PORT=4000
-   DB_CONNECT_STRING=mongodb://127.0.0.1:27017/CodeZen
-   JWT_KEY=CodeZenSecretKey_12345
-   REDIS_HOST_ID=127.0.0.1
-   REDIS_PORT=6379
-   GEMINI_API_KEY=your_gemini_api_key
-   RAPIDAPI_KEY=your_onecompiler_api_key
-   RAPIDAPI_HOST=onecompiler-apis.p.rapidapi.com
-   ```
-3. Install dependencies and start the backend:
-   ```bash
-   cd backend
-   npm install
-   
-   # Optional: Seed the database with default problems and Admin user credentials
-   node seed.js
-   
-   # Run backend server
-   node src/index.js
-   ```
+* Track solved problems.
+* View submission history.
+* Monitor coding progress and performance statistics.
 
 ---
 
-### Step 2: Configure & Run Frontend
-1. Open the `/frontend` directory.
-2. Install dependencies:
-   ```bash
-   cd frontend
-   npm install
-   ```
-3. Run the development client:
-   ```bash
-   npm run dev
-   ```
-4. Access the application in your browser at: `http://localhost:5173`
+## 🛠 Tech Stack
+
+### Frontend
+
+* React
+* Vite
+* Redux Toolkit
+* Tailwind CSS
+* DaisyUI
+* Axios
+
+### Backend
+
+* Node.js
+* Express.js
+
+### Database & Cache
+
+* MongoDB
+* Redis
+
+### AI & External Services
+
+* Google Gemini API
+* OneCompiler API
 
 ---
 
-## 📂 Project Architecture
+## ⚙️ Environment Variables
 
-```mermaid
-graph TD
-    Client[React Frontend - Port 5173] <--> |API Requests / Proxy| Server[Express Backend - Port 4000]
-    Server <--> MongoDB[(MongoDB)]
-    Server <--> Redis[(Redis Cache)]
-    Server --> |Gemini API| Gemini[Google AI Studio]
-    Server --> |RapidAPI| Compiler[OneCompiler Code Execution]
+Create a `.env` file inside the backend folder:
+
+```env
+PORT=4000
+
+DB_CONNECT_STRING=mongodb://127.0.0.1:27017/CodeZen
+
+JWT_KEY=your_jwt_secret_key
+
+REDIS_HOST_ID=127.0.0.1
+REDIS_PORT=6379
+
+GEMINI_API_KEY=your_gemini_api_key
+
+RAPIDAPI_KEY=your_rapidapi_key
+RAPIDAPI_HOST=onecompiler-apis.p.rapidapi.com
 ```
 
 ---
 
-## 💡 Interview Questions / System Design Rationale
+## 🚀 Local Setup
 
-During placement interviews, be ready to explain these architectural decisions:
-1. **Frictionless Onboarding**: We use direct user registration rather than email verification to ensure recruiters can sign up, log in, and test the platform in seconds.
-2. **AI Tutor Guidelines**: The Gemini assistant is explicitly prompted to act as a *tutor*. It guides the user through debugging checklist patterns and hints, instead of outputting copy-paste code.
-3. **Session Blacklisting**: When a user logs out, the token is stored in **Redis** with an expiration time matching the JWT's lifespan, preventing hijacked tokens from accessing protected routes.
-4. **Vite Proxy Bypass**: Frontend runs on port `5173` and proxies `/api` calls to the backend on `4000` via Vite configurations, bypassing CORS issues cleanly during local development.
+### Clone Repository
+
+```bash
+git clone <repository-url>
+cd CodeZen
+```
+
+### Backend Setup
+
+```bash
+cd backend
+
+npm install
+
+# Seed database (optional)
+node seed.js
+
+# Start server
+node src/index.js
+```
+
+Backend runs on:
+
+```text
+http://localhost:4000
+```
+
+### Frontend Setup
+
+```bash
+cd frontend
+
+npm install
+
+npm run dev
+```
+
+Frontend runs on:
+
+```text
+http://localhost:5173
+```
+
+---
+
+## 🏗 Architecture
+
+Frontend (React + Vite)
+↓
+Express Backend
+↓
+├── MongoDB (Data Storage)
+├── Redis (Token Blacklisting)
+├── Gemini API (AI Tutor)
+└── OneCompiler API (Code Execution)
+
+---
+
+## 🎯 Key Design Decisions
+
+### AI as a Tutor
+
+The AI assistant is designed to guide users through problem-solving rather than providing direct solutions. This promotes learning and strengthens interview preparation skills.
+
+### Secure Logout System
+
+Logged-out JWT tokens are stored in Redis with an expiration time matching the token lifespan, preventing reuse of compromised tokens.
+
+### Scalable Architecture
+
+Frontend, backend, database, cache, AI services, and code execution services are separated for easier maintenance and scalability.
+
+### Developer-Friendly Experience
+
+Vite proxy configuration routes frontend API requests to the backend, eliminating CORS issues during development.
+
+---
+
+## 👨‍💻 Author
+
+Shakti Sah
+
+Built with React, Node.js, MongoDB, Redis, and Google Gemini AI.

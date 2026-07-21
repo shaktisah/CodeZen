@@ -1,13 +1,13 @@
 import axios from "axios"
 
-const axiosClient =  axios.create({
-    baseURL: import.meta.env.VITE_API_URL || '/api',
+const axiosClient = axios.create({
+    baseURL: import.meta.env.VITE_BACKEND_URL || 'https://codezen-i3ih.onrender.com',
     withCredentials: true,
     headers: {
         'Content-Type': 'application/json'
     }
 });
 
-
 export default axiosClient;
+
 
