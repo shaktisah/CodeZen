@@ -37,8 +37,20 @@ function Signup() {
       await axiosClient.post('/user/register', data);
       navigate(redirectTarget !== '/' ? `/login?redirect=${encodeURIComponent(redirectTarget)}` : '/login');
     } catch (err) {
-      const msg = err.response?.data || 'Registration failed';
-      setError(msg);
+      console.error('Signup error:', err);
+      let rawErr = err.response?.data?.message || err.response?.data || err.message || 'Registration failed';
+      if (typeof rawErr === 'object') {
+        rawErr = JSON.stringify(rawErr);
+      }
+      let cleanMsg = 'Registration failed';
+      if (typeof rawErr === 'string') {
+        if (rawErr.trim().startsWith('<') || rawErr.includes('<!DOCTYPE html>')) {
+          cleanMsg = 'Server error or connection issue. Please try again.';
+        } else {
+          cleanMsg = rawErr.replace(/^Error:\s*/i, '');
+        }
+      }
+      setError(cleanMsg);
     } finally {
       setLoading(false);
     }
@@ -136,9 +148,13 @@ function Signup() {
                   )}
                 </button>
               </div>
-              {errors.password && (
+              {errors.password ? (
                 <span className="text-red-500 dark:text-red-400 text-xs mt-1 block">
                   {errors.password.message}
+                </span>
+              ) : (
+                <span className="text-[11px] text-zinc-500 dark:text-zinc-500 mt-1 block">
+                  Must include uppercase, lowercase, number & special character (e.g. CodeZen@123).
                 </span>
               )}
             </div>

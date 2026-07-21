@@ -39,8 +39,20 @@ function Login() {
       await refreshUser();
       navigate(redirectTarget);
     } catch (err) {
-      const msg = err.response?.data || 'Login failed. Invalid credentials.';
-      setError(msg);
+      console.error('Login error:', err);
+      let rawErr = err.response?.data?.message || err.response?.data || err.message || 'Login failed. Invalid credentials.';
+      if (typeof rawErr === 'object') {
+        rawErr = JSON.stringify(rawErr);
+      }
+      let cleanMsg = 'Login failed. Invalid credentials.';
+      if (typeof rawErr === 'string') {
+        if (rawErr.trim().startsWith('<') || rawErr.includes('<!DOCTYPE html>')) {
+          cleanMsg = 'Server error or connection issue. Please try again.';
+        } else {
+          cleanMsg = rawErr.replace(/^Error:\s*/i, '');
+        }
+      }
+      setError(cleanMsg);
     } finally {
       setLoading(false);
     }

@@ -1,3 +1,6 @@
+const dns = require('dns');
+dns.setServers(['8.8.8.8', '8.8.4.4']);
+
 const express = require('express');
 const app =express();
 const path = require('path');
@@ -15,7 +18,7 @@ const checkAndSeedProblems = require('./utils/autoSeed');
 
 const allowedOrigins = process.env.FRONTEND_URL
     ? process.env.FRONTEND_URL.split(',').map(o => o.trim())
-    : ['http://localhost:5173'];
+    : ['http://localhost:5173', 'http://localhost:3000', '*'];
 
 app.use(cors({
     origin: function (origin, callback) {
