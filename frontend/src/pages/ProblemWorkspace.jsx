@@ -49,6 +49,13 @@ function ProblemWorkspace() {
           setSelectedLanguage(defaultLang);
           const langCode = p.startCode?.find(c => c.language?.toLowerCase() === defaultLang);
           setCode(langCode ? langCode.initialCode : getDefaultCodeTemplate(defaultLang));
+
+          setAiMessages([
+            {
+              sender: 'ai',
+              text: `👋 Hi! I'm your CodeZen AI Assistant for **${p.title}**.\n\nNeed help? Ask a question or click one of the quick prompt options below!`
+            }
+          ]);
         } else {
           setError('Problem not found');
         }
@@ -178,11 +185,11 @@ function ProblemWorkspace() {
         submitResult
       });
 
-      const reply = res.data?.reply || res.data?.message || 'AI assistant processed your request.';
+      const reply = res.data?.response || res.data?.reply || res.data?.message || 'AI assistant processed your request.';
       setAiMessages([...newMessages, { sender: 'ai', text: reply }]);
     } catch (err) {
       console.error('AI Chat Error:', err);
-      const errorMsg = err.response?.data?.message || err.response?.data || 'Failed to reach AI Assistant. Please log in to chat.';
+      const errorMsg = err.response?.data?.message || err.response?.data?.error || err.response?.data || 'Failed to reach AI Assistant.';
       setAiMessages([...newMessages, { sender: 'ai', text: `⚠️ ${typeof errorMsg === 'string' ? errorMsg : JSON.stringify(errorMsg)}` }]);
     } finally {
       setAiLoading(false);
@@ -557,8 +564,44 @@ function ProblemWorkspace() {
               )}
             </div>
 
+            {/* Quick Prompt Chips */}
+            <div className="px-3 pt-2.5 pb-1 bg-zinc-950 flex items-center gap-1.5 overflow-x-auto text-[11px] border-t border-zinc-900">
+              <button
+                type="button"
+                onClick={() => handleSendAiMessage("Can you give me a hint for this problem?")}
+                disabled={aiLoading}
+                className="shrink-0 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 hover:border-indigo-500/50 text-zinc-300 hover:text-white px-2.5 py-1 rounded-lg transition-colors cursor-pointer disabled:opacity-50"
+              >
+                💡 Hint
+              </button>
+              <button
+                type="button"
+                onClick={() => handleSendAiMessage("Explain this problem simply.")}
+                disabled={aiLoading}
+                className="shrink-0 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 hover:border-indigo-500/50 text-zinc-300 hover:text-white px-2.5 py-1 rounded-lg transition-colors cursor-pointer disabled:opacity-50"
+              >
+                📚 Explain
+              </button>
+              <button
+                type="button"
+                onClick={() => handleSendAiMessage("Check my current code for bugs or errors.")}
+                disabled={aiLoading}
+                className="shrink-0 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 hover:border-indigo-500/50 text-zinc-300 hover:text-white px-2.5 py-1 rounded-lg transition-colors cursor-pointer disabled:opacity-50"
+              >
+                🐛 Debug
+              </button>
+              <button
+                type="button"
+                onClick={() => handleSendAiMessage("How can I optimize the time and space complexity of my code?")}
+                disabled={aiLoading}
+                className="shrink-0 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 hover:border-indigo-500/50 text-zinc-300 hover:text-white px-2.5 py-1 rounded-lg transition-colors cursor-pointer disabled:opacity-50"
+              >
+                ⚡ Optimize
+              </button>
+            </div>
+
             {/* Chat Input Area */}
-            <div className="p-3 border-t border-zinc-900 bg-zinc-950">
+            <div className="p-3 bg-zinc-950">
               <form
                 onSubmit={(e) => {
                   e.preventDefault();

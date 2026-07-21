@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Problem = require("../models/problem");
-const { getLanguageById, submitBatch } = require("../utils/ProblemUtility");
+const { getLanguageById, submitBatch, extractFunctionName, buildDriverCode } = require("../utils/ProblemUtility");
 const User = require("../models/user");
 
 const createProblem = async (req, res) => {
@@ -29,37 +29,14 @@ const createProblem = async (req, res) => {
 
         for (const { language, completeCode } of referenceSolution) {
             const languageId = getLanguageById(language);
+            const funcName = extractFunctionName(completeCode, languageId);
 
             const submissions = allTestCases.map((testCase) => {
                 const ext = languageId === "javascript" ? "js" :
                             languageId === "python" ? "py" :
                             languageId === "java" ? "java" : "cpp";
 
-                let driverCode = completeCode;
-
-                if (languageId === "javascript") {
-                    let formattedInput = `const ${testCase.input.replace(/,\s*(?=[a-zA-Z_])/g, '; const ')}`;
-                    driverCode += `\n\n${formattedInput};\nconsole.log(JSON.stringify(twoSum(nums, target)));`;
-                } else if (languageId === "python") {
-                    let formattedInput = testCase.input.replace(/,\s*(?=[a-zA-Z_])/g, '\n');
-                    driverCode += `\n\n${formattedInput}\nprint(twoSum(nums, target))`;
-                } else if (languageId === "cpp") {
-                    let formattedInput = testCase.input;
-                    formattedInput = formattedInput.replace(/\[/g, '{').replace(/\]/g, '}');
-                    formattedInput = formattedInput.replace(/nums\s*=\s*/g, 'vector<int> nums = ');
-                    formattedInput = formattedInput.replace(/target\s*=\s*/g, 'int target = ');
-                    formattedInput = formattedInput.replace(/,\s*(?=int target)/g, '; ');
-
-                    driverCode = `#include <iostream>\n#include <vector>\n#include <unordered_map>\nusing namespace std;\n\n${completeCode}\n\nint main() {\n    ${formattedInput};\n    vector<int> res = twoSum(nums, target);\n    if (res.size() >= 2) {\n        cout << "[" << res[0] << "," << res[1] << "]";\n    }\n    return 0;\n}`;
-                } else if (languageId === "java") {
-                    let formattedInput = testCase.input;
-                    formattedInput = formattedInput.replace(/\[/g, 'new int[]{').replace(/\]/g, '}');
-                    formattedInput = formattedInput.replace(/nums\s*=\s*/g, 'int[] nums = ');
-                    formattedInput = formattedInput.replace(/target\s*=\s*/g, 'int target = ');
-                    formattedInput = formattedInput.replace(/,\s*(?=int target)/g, '; ');
-
-                    driverCode = `import java.util.*;\n\npublic class Main {\n    ${completeCode}\n\n    public static void main(String[] args) {\n        Main solver = new Main();\n        ${formattedInput};\n        int[] res = solver.twoSum(nums, target);\n        System.out.print(Arrays.toString(res).replace(" ", ""));\n    }\n}`;
-                }
+                const driverCode = buildDriverCode(languageId, completeCode, testCase.input, funcName);
 
                 return {
                     language: languageId,
