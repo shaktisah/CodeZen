@@ -23,6 +23,7 @@ function ProblemWorkspace() {
   const [submitResult, setSubmitResult] = useState(null);
   const [activeTab, setActiveTab] = useState('code'); // 'code' | 'testcase' | 'result'
   const [activeResultTab, setActiveResultTab] = useState(0);
+  const [activeTestcaseTab, setActiveTestcaseTab] = useState(0);
 
   // AI Assistant states
   const [showAi, setShowAi] = useState(true);
@@ -371,125 +372,186 @@ function ProblemWorkspace() {
             </div>
           </div>
 
-          {/* Language Selection Pills */}
-          <div className="border-b border-zinc-900 bg-[#09090b] px-4 py-2 flex items-center gap-2">
-            {['javascript', 'python', 'c++', 'java'].map((lang) => (
-              <button
-                key={lang}
-                type="button"
-                onClick={() => handleLanguageChange(lang)}
-                className={`px-3 py-1 rounded-lg text-xs font-bold tracking-wider transition-colors cursor-pointer uppercase ${
-                  selectedLanguage.toLowerCase() === lang
-                    ? 'bg-indigo-600 text-white shadow-sm'
-                    : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900'
-                }`}
-              >
-                {lang}
-              </button>
-            ))}
-          </div>
-
-          {/* Code Editor Area */}
-          <div className="flex-1 relative overflow-hidden bg-[#09090b]/50">
-            <textarea
-              value={code}
-              onChange={(e) => setCode(e.target.value)}
-              spellCheck="false"
-              className="w-full h-full p-4 font-mono text-xs bg-transparent text-zinc-100 resize-none focus:outline-none leading-relaxed"
-              style={{ tabSize: 4 }}
-            />
-          </div>
-
-          {/* Result / Output Panel */}
-          {activeTab === 'result' && (
-            <div className="h-56 shrink-0 bg-[#09090b] border-t border-zinc-900 overflow-y-auto flex flex-col p-4 font-sans text-xs">
-              {running || submitting ? (
-                <div className="h-full flex flex-col items-center justify-center gap-2 text-zinc-400">
-                  <span className="loading loading-spinner loading-sm text-indigo-500"></span>
-                  <span className="text-xs font-bold uppercase tracking-wider">Evaluating solution...</span>
-                </div>
-              ) : !runResult && !submitResult ? (
-                <div className="h-full flex items-center justify-center text-zinc-500 text-xs">
-                  Run or Submit your code to see evaluation results.
-                </div>
-              ) : runResult ? (
-                /* Run Result */
-                <div className="space-y-3 h-full">
-                  <div className="flex items-center gap-2 text-xs">
-                    <span className="font-bold text-zinc-400">Status:</span>
-                    <span className={`badge border text-[10px] px-2.5 py-0.5 rounded-md font-bold uppercase ${
-                      runResult.status === 'Accepted' ? 'bg-teal-950/20 border-teal-900/35 text-teal-400' : 'bg-rose-950/20 border-rose-900/35 text-rose-400'
-                    }`}>
-                      {runResult.status}
-                    </span>
-                  </div>
-
-                  {runResult.error ? (
-                    <div className="bg-rose-950/20 border border-rose-900/40 rounded-lg p-3 text-xs text-rose-400 font-mono whitespace-pre-wrap leading-relaxed max-h-32 overflow-y-auto">
-                      {runResult.error}
-                    </div>
-                  ) : runResult.results ? (
-                    <div className="space-y-3">
-                      <div className="flex gap-2 border-b border-zinc-900 pb-2">
-                        {runResult.results.map((res, idx) => (
-                          <button
-                            key={idx}
-                            type="button"
-                            onClick={() => setActiveResultTab(idx)}
-                            className={`px-3 py-1 rounded-md text-xs font-bold cursor-pointer border ${
-                              activeResultTab === idx
-                                ? 'bg-indigo-950/40 border-indigo-600 text-indigo-400'
-                                : 'bg-[#09090b] border-zinc-800 text-zinc-400 hover:bg-zinc-900'
-                            }`}
-                          >
-                            Case {idx + 1} ({res.passed ? 'Pass' : 'Fail'})
-                          </button>
-                        ))}
-                      </div>
-
-                      {runResult.results[activeResultTab] && (
-                        <div className="space-y-2 text-xs font-mono bg-zinc-950 border border-zinc-800 rounded-lg p-3">
-                          <div><span className="text-zinc-500 font-bold">Input:</span> <span className="text-zinc-200">{runResult.results[activeResultTab].input}</span></div>
-                          <div><span className="text-zinc-500 font-bold">Expected Output:</span> <span className="text-zinc-200">{runResult.results[activeResultTab].expectedOutput}</span></div>
-                          <div>
-                            <span className="text-zinc-500 font-bold">Your stdout:</span>{' '}
-                            <span className={runResult.results[activeResultTab].passed ? 'text-teal-400 font-bold' : 'text-rose-400 font-bold'}>
-                              {runResult.results[activeResultTab].actualOutput || 'Empty/Null'}
-                            </span>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  ) : null}
-                </div>
-              ) : (
-                /* Submit Result */
-                <div className="space-y-3 h-full flex flex-col justify-center text-center">
-                  {submitResult.status === 'Accepted' ? (
-                    <div className="space-y-2">
-                      <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-teal-950/20 border border-teal-900/35 text-teal-400 rounded-md text-xs font-bold uppercase">
-                        Accepted
-                      </div>
-                      <h3 className="text-sm font-bold text-white">All test cases passed!</h3>
-                      <div className="flex justify-center gap-6 text-xs text-zinc-400 pt-2 font-mono">
-                        <div><span className="text-zinc-500 block">Passed</span><span className="text-zinc-200 font-bold">{submitResult.testCasesPassed} / {submitResult.totalTestCases}</span></div>
-                        <div><span className="text-zinc-500 block">Runtime</span><span className="text-zinc-200 font-bold">{(submitResult.runtime || 0).toFixed(2)}s</span></div>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="space-y-2">
-                      <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-rose-950/20 border border-rose-900/35 text-rose-400 rounded-md text-xs font-bold uppercase">
-                        {submitResult.status || 'Failed'}
-                      </div>
-                      <p className="text-xs text-zinc-400 font-mono">
-                        Passed {submitResult.testCasesPassed || 0} / {submitResult.totalTestCases || 0} test cases.
-                      </p>
-                    </div>
-                  )}
-                </div>
-              )}
+          {/* Language Selection Pills (visible in Code tab) */}
+          {activeTab === 'code' && (
+            <div className="border-b border-zinc-900 bg-[#09090b] px-4 py-2 flex items-center gap-2">
+              {['javascript', 'python', 'c++', 'java'].map((lang) => (
+                <button
+                  key={lang}
+                  type="button"
+                  onClick={() => handleLanguageChange(lang)}
+                  className={`px-3 py-1 rounded-lg text-xs font-bold tracking-wider transition-colors cursor-pointer uppercase ${
+                    selectedLanguage.toLowerCase() === lang
+                      ? 'bg-indigo-600 text-white shadow-sm'
+                      : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900'
+                  }`}
+                >
+                  {lang}
+                </button>
+              ))}
             </div>
           )}
+
+          {/* Main Middle Content Area based on activeTab */}
+          <div className="flex-1 relative overflow-hidden bg-[#09090b]/50">
+            {activeTab === 'code' && (
+              <textarea
+                value={code}
+                onChange={(e) => setCode(e.target.value)}
+                spellCheck="false"
+                className="w-full h-full p-4 font-mono text-xs bg-transparent text-zinc-100 resize-none focus:outline-none leading-relaxed"
+                style={{ tabSize: 4 }}
+              />
+            )}
+
+            {activeTab === 'testcase' && (
+              <div className="h-full overflow-y-auto p-4 space-y-4 font-sans text-xs">
+                <div className="flex gap-2 border-b border-zinc-900 pb-3">
+                  {problem?.visibleTestCases?.map((tc, idx) => (
+                    <button
+                      key={idx}
+                      type="button"
+                      onClick={() => setActiveTestcaseTab(idx)}
+                      className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-colors cursor-pointer border ${
+                        activeTestcaseTab === idx
+                          ? 'bg-indigo-950/40 border-indigo-600 text-indigo-400'
+                          : 'bg-zinc-900 border-zinc-800 text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800'
+                      }`}
+                    >
+                      Case {idx + 1}
+                    </button>
+                  ))}
+                </div>
+
+                {problem?.visibleTestCases?.[activeTestcaseTab] ? (
+                  <div className="space-y-4 pt-1">
+                    <div>
+                      <label className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider block mb-1.5">
+                        Input
+                      </label>
+                      <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-3 font-mono text-xs text-zinc-200 whitespace-pre-wrap">
+                        {problem.visibleTestCases[activeTestcaseTab].input}
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider block mb-1.5">
+                        Expected Output
+                      </label>
+                      <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-3 font-mono text-xs text-zinc-200 whitespace-pre-wrap">
+                        {problem.visibleTestCases[activeTestcaseTab].output}
+                      </div>
+                    </div>
+
+                    {problem.visibleTestCases[activeTestcaseTab].explanation && (
+                      <div>
+                        <label className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider block mb-1.5">
+                          Explanation
+                        </label>
+                        <div className="bg-zinc-900/60 border border-zinc-800/80 rounded-xl p-3 text-xs text-zinc-400 leading-relaxed">
+                          {problem.visibleTestCases[activeTestcaseTab].explanation}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="text-zinc-500 text-xs py-4">
+                    No visible test cases provided for this problem.
+                  </div>
+                )}
+              </div>
+            )}
+
+            {activeTab === 'result' && (
+              <div className="h-full overflow-y-auto flex flex-col p-4 font-sans text-xs">
+                {running || submitting ? (
+                  <div className="h-full flex flex-col items-center justify-center gap-2 text-zinc-400">
+                    <span className="loading loading-spinner loading-sm text-indigo-500"></span>
+                    <span className="text-xs font-bold uppercase tracking-wider">Evaluating solution...</span>
+                  </div>
+                ) : !runResult && !submitResult ? (
+                  <div className="h-full flex items-center justify-center text-zinc-500 text-xs">
+                    Run or Submit your code to see evaluation results.
+                  </div>
+                ) : runResult ? (
+                  /* Run Result */
+                  <div className="space-y-3 h-full">
+                    <div className="flex items-center gap-2 text-xs">
+                      <span className="font-bold text-zinc-400">Status:</span>
+                      <span className={`badge border text-[10px] px-2.5 py-0.5 rounded-md font-bold uppercase ${
+                        runResult.status === 'Accepted' ? 'bg-teal-950/20 border-teal-900/35 text-teal-400' : 'bg-rose-950/20 border-rose-900/35 text-rose-400'
+                      }`}>
+                        {runResult.status}
+                      </span>
+                    </div>
+
+                    {runResult.error ? (
+                      <div className="bg-rose-950/20 border border-rose-900/40 rounded-lg p-3 text-xs text-rose-400 font-mono whitespace-pre-wrap leading-relaxed max-h-48 overflow-y-auto">
+                        {runResult.error}
+                      </div>
+                    ) : runResult.results ? (
+                      <div className="space-y-3">
+                        <div className="flex gap-2 border-b border-zinc-900 pb-2">
+                          {runResult.results.map((res, idx) => (
+                            <button
+                              key={idx}
+                              type="button"
+                              onClick={() => setActiveResultTab(idx)}
+                              className={`px-3 py-1 rounded-md text-xs font-bold cursor-pointer border ${
+                                activeResultTab === idx
+                                  ? 'bg-indigo-950/40 border-indigo-600 text-indigo-400'
+                                  : 'bg-[#09090b] border-zinc-800 text-zinc-400 hover:bg-zinc-900'
+                              }`}
+                            >
+                              Case {idx + 1} ({res.passed ? 'Pass' : 'Fail'})
+                            </button>
+                          ))}
+                        </div>
+
+                        {runResult.results[activeResultTab] && (
+                          <div className="space-y-2 text-xs font-mono bg-zinc-950 border border-zinc-800 rounded-lg p-3">
+                            <div><span className="text-zinc-500 font-bold">Input:</span> <span className="text-zinc-200">{runResult.results[activeResultTab].input}</span></div>
+                            <div><span className="text-zinc-500 font-bold">Expected Output:</span> <span className="text-zinc-200">{runResult.results[activeResultTab].expectedOutput}</span></div>
+                            <div>
+                              <span className="text-zinc-500 font-bold">Your stdout:</span>{' '}
+                              <span className={runResult.results[activeResultTab].passed ? 'text-teal-400 font-bold' : 'text-rose-400 font-bold'}>
+                                {runResult.results[activeResultTab].actualOutput || 'Empty/Null'}
+                              </span>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    ) : null}
+                  </div>
+                ) : (
+                  /* Submit Result */
+                  <div className="space-y-3 h-full flex flex-col justify-center text-center">
+                    {submitResult.status === 'Accepted' ? (
+                      <div className="space-y-2">
+                        <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-teal-950/20 border border-teal-900/35 text-teal-400 rounded-md text-xs font-bold uppercase">
+                          Accepted
+                        </div>
+                        <h3 className="text-sm font-bold text-white">All test cases passed!</h3>
+                        <div className="flex justify-center gap-6 text-xs text-zinc-400 pt-2 font-mono">
+                          <div><span className="text-zinc-500 block">Passed</span><span className="text-zinc-200 font-bold">{submitResult.testCasesPassed} / {submitResult.totalTestCases}</span></div>
+                          <div><span className="text-zinc-500 block">Runtime</span><span className="text-zinc-200 font-bold">{(submitResult.runtime || 0).toFixed(2)}s</span></div>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="space-y-2">
+                        <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-rose-950/20 border border-rose-900/35 text-rose-400 rounded-md text-xs font-bold uppercase">
+                          {submitResult.status || 'Failed'}
+                        </div>
+                        <p className="text-xs text-zinc-400 font-mono">
+                          Passed {submitResult.testCasesPassed || 0} / {submitResult.totalTestCases || 0} test cases.
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Right Column: Dedicated Collapsible AI Assistant Panel */}
