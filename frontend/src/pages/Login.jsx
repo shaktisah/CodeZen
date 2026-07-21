@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../components/AuthContext';
 import axiosClient from '../utils/axiosClient';
 import { EyeIcon, EyeOffIcon } from '../components/icons/EyeIcons';
@@ -14,10 +14,14 @@ const loginSchema = z.object({
 
 function Login() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { refreshUser } = useAuth();
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+
+  const searchParams = new URLSearchParams(location.search);
+  const redirectTarget = searchParams.get('redirect') || '/';
 
   const {
     register,
@@ -33,7 +37,7 @@ function Login() {
     try {
       await axiosClient.post('/user/login', data);
       await refreshUser();
-      navigate('/');
+      navigate(redirectTarget);
     } catch (err) {
       const msg = err.response?.data || 'Login failed. Invalid credentials.';
       setError(msg);
@@ -127,7 +131,7 @@ function Login() {
 
           <p className="text-center text-xs text-zinc-500 dark:text-zinc-400 mt-6">
             Don't have an account?{' '}
-            <Link to="/signup" className="text-cyan-600 dark:text-cyan-400 hover:text-cyan-500 dark:hover:text-cyan-300 font-medium hover:underline transition-colors">
+            <Link to={redirectTarget !== '/' ? `/signup?redirect=${encodeURIComponent(redirectTarget)}` : '/signup'} className="text-cyan-600 dark:text-cyan-400 hover:text-cyan-500 dark:hover:text-cyan-300 font-medium hover:underline transition-colors">
               Sign Up
             </Link>
           </p>

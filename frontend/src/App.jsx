@@ -1,52 +1,91 @@
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Homepage from "./pages/Homepage";
 import AdminPanel from "./pages/AdminPanel";
 import ProblemWorkspace from "./pages/ProblemWorkspace";
 import Profile from "./pages/Profile";
-import { checkAuth } from "./authSlice";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useAuth } from "./components/AuthContext";
+
+function ProtectedRoute({ children }) {
+  const { user } = useAuth();
+  const location = useLocation();
+
+  if (!user) {
+    return <Navigate to={`/login?redirect=${encodeURIComponent(location.pathname)}`} replace />;
+  }
+
+  return children;
+}
+
+function AdminRoute({ children }) {
+  const { user } = useAuth();
+  const location = useLocation();
+
+  if (!user) {
+    return <Navigate to={`/login?redirect=${encodeURIComponent(location.pathname)}`} replace />;
+  }
+
+  if (user.role !== 'admin') {
+    return <Navigate to="/" replace />;
+  }
+
+  return children;
+}
 
 function App() {
-  const { isAuthenticated } = useSelector((state) => state.auth);
-  const dispatch = useDispatch();
+  const { user, loading } = useAuth();
 
-  useEffect(() => {
-    dispatch(checkAuth());
-  }, [dispatch]);
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-zinc-50 dark:bg-[#09090b] flex items-center justify-center text-zinc-900 dark:text-white font-sans">
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-8 h-8 border-2 border-cyan-500 border-t-transparent rounded-full animate-spin"></div>
+          <p className="text-xs text-zinc-500 dark:text-zinc-400">Loading CodeZen...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <Routes>
-      <Route
-        path="/"
-        element={isAuthenticated ? <Homepage /> : <Navigate to="/signup" />}
-      />
+      <Route path="/" element={<Homepage />} />
 
       <Route
         path="/login"
-        element={isAuthenticated ? <Navigate to="/" /> : <Login />}
+        element={user ? <Navigate to="/" /> : <Login />}
       />
 
       <Route
         path="/signup"
-        element={isAuthenticated ? <Navigate to="/" /> : <Signup />}
+        element={user ? <Navigate to="/" /> : <Signup />}
       />
 
       <Route
         path="/admin"
-        element={isAuthenticated ? <AdminPanel /> : <Navigate to="/login" />}
+        element={
+          <AdminRoute>
+            <AdminPanel />
+          </AdminRoute>
+        }
       />
 
       <Route
         path="/problem/:id"
-        element={isAuthenticated ? <ProblemWorkspace /> : <Navigate to="/login" />}
+        element={
+          <ProtectedRoute>
+            <ProblemWorkspace />
+          </ProtectedRoute>
+        }
       />
 
       <Route
         path="/profile"
-        element={isAuthenticated ? <Profile /> : <Navigate to="/login" />}
+        element={
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        }
       />
 
       <Route path="*" element={<Navigate to="/" />} />

@@ -23,11 +23,15 @@ function ProblemTable({ problems, solvedProblemIds, loading, user }) {
                 <th>Title</th>
                 <th>Difficulty</th>
                 <th>Tags</th>
+                <th className="text-right pr-4">Action</th>
               </tr>
             </thead>
             <tbody>
               {problems.map((problem) => {
                 const isSolved = solvedProblemIds.has(problem._id.toString());
+                const problemLink = user 
+                  ? `/problem/${problem._id}` 
+                  : `/login?redirect=${encodeURIComponent(`/problem/${problem._id}`)}`;
                 
                 let diffColorClass = 'text-teal-650 bg-teal-50 border-teal-200 dark:text-teal-400 dark:bg-teal-950/20 dark:border-teal-900/35';
                 if (problem.difficulty?.toLowerCase() === 'medium') {
@@ -54,7 +58,7 @@ function ProblemTable({ problems, solvedProblemIds, loading, user }) {
                       )}
                     </td>
                     <td className="font-medium text-zinc-900 dark:text-white text-xs">
-                      <Link to={user ? `/problem/${problem._id}` : "/login"} className="hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors">
+                      <Link to={problemLink} className="hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors">
                         {problem.title}
                       </Link>
                     </td>
@@ -75,6 +79,17 @@ function ProblemTable({ problems, solvedProblemIds, loading, user }) {
                           <span className="text-zinc-400 dark:text-zinc-700 text-[10px]">-</span>
                         )}
                       </div>
+                    </td>
+                    <td className="text-right pr-4">
+                      <Link
+                        to={problemLink}
+                        className="inline-flex items-center gap-1 text-[11px] font-semibold px-2.5 py-1 rounded-md bg-zinc-900 hover:bg-zinc-800 text-white dark:bg-cyan-500/10 dark:hover:bg-cyan-500/20 dark:text-cyan-400 dark:border dark:border-cyan-500/30 transition-all shadow-xs"
+                      >
+                        <span>Solve</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3 h-3">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                        </svg>
+                      </Link>
                     </td>
                   </tr>
                 );
