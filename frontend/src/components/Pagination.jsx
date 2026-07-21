@@ -37,7 +37,7 @@ function Pagination({ currentPage, totalPages, totalItems, itemsPerPage, onPageC
             className={`join-item btn btn-xs text-[10px] font-bold px-2.5 cursor-pointer border-none ${
               currentPage === page
                 ? 'bg-cyan-100 dark:bg-cyan-950/30 text-cyan-700 dark:text-cyan-400 hover:bg-cyan-200 dark:hover:bg-cyan-950/40'
-                : 'btn-ghost text-zinc-550 dark:text-zinc-555 hover:text-zinc-900 dark:hover:text-zinc-300'
+                : 'btn-ghost text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-300'
             }`}
           >
             {page}

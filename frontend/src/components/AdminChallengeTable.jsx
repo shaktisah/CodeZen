@@ -16,7 +16,7 @@ function AdminChallengeTable({ problems, loadingProblems, onEdit, onDelete }) {
         <div className="overflow-x-auto">
           <table className="table w-full text-zinc-700 dark:text-zinc-300">
             <thead>
-              <tr className="border-b border-zinc-200 dark:border-zinc-900 text-zinc-400 dark:text-zinc-555 uppercase text-[10px] tracking-wider bg-zinc-50 dark:bg-zinc-900/10 font-bold">
+              <tr className="border-b border-zinc-200 dark:border-zinc-900 text-zinc-400 dark:text-zinc-500 uppercase text-[10px] tracking-wider bg-zinc-50 dark:bg-zinc-900/10 font-bold">
                 <th>Title</th>
                 <th>Difficulty</th>
                 <th>Tags</th>
@@ -25,7 +25,7 @@ function AdminChallengeTable({ problems, loadingProblems, onEdit, onDelete }) {
             </thead>
             <tbody>
               {problems.map((problem) => {
-                let diffColorClass = 'text-teal-650 bg-teal-50 border-teal-200 dark:text-teal-400 dark:bg-teal-950/20 dark:border-teal-900/35';
+                let diffColorClass = 'text-teal-600 bg-teal-50 border-teal-200 dark:text-teal-400 dark:bg-teal-950/20 dark:border-teal-900/35';
                 if (problem.difficulty?.toLowerCase() === 'medium') {
                   diffColorClass = 'text-amber-600 bg-amber-50 border-amber-200 dark:text-amber-400 dark:bg-amber-950/20 dark:border-amber-900/35';
                 } else if (problem.difficulty?.toLowerCase() === 'hard') {
@@ -60,7 +60,7 @@ function AdminChallengeTable({ problems, loadingProblems, onEdit, onDelete }) {
                       <button
                         type="button"
                         onClick={() => onDelete(problem._id)}
-                        className="btn btn-xs btn-outline border-red-300 text-red-650 hover:bg-red-50 dark:border-red-900 dark:text-red-400 dark:hover:bg-red-950/20 rounded-md text-[10px] cursor-pointer"
+                        className="btn btn-xs btn-outline border-red-300 text-red-600 hover:bg-red-50 dark:border-red-900 dark:text-red-400 dark:hover:bg-red-950/20 rounded-md text-[10px] cursor-pointer"
                       >
                         Delete
                       </button>

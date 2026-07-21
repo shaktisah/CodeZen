@@ -23,8 +23,8 @@ function StatsSidebar({
           
           <div className="border-t border-zinc-200 dark:border-zinc-900 pt-3.5 space-y-3">
             <div className="flex justify-between items-center text-xs">
-              <span className="text-zinc-500 dark:text-zinc-555">Overall Solved</span>
-              <span className="font-bold text-zinc-900 dark:text-white">{solvedCount} <span className="text-zinc-400 dark:text-zinc-650 font-normal">/ {totalCount}</span></span>
+              <span className="text-zinc-500 dark:text-zinc-400">Overall Solved</span>
+              <span className="font-bold text-zinc-900 dark:text-white">{solvedCount} <span className="text-zinc-400 dark:text-zinc-500 font-normal">/ {totalCount}</span></span>
             </div>
             
           
@@ -37,11 +37,11 @@ function StatsSidebar({
 
             <div className="space-y-2 text-xs pt-1.5">
               <div className="flex justify-between items-center text-[11px]">
-                <span className="text-teal-650 dark:text-teal-400 font-semibold">Easy</span>
+                <span className="text-teal-600 dark:text-teal-400 font-semibold">Easy</span>
                 <span className="text-zinc-500 dark:text-zinc-500 font-medium">{solvedEasy} / {easyCount}</span>
               </div>
               <div className="flex justify-between items-center text-[11px]">
-                <span className="text-amber-650 dark:text-amber-400 font-semibold">Medium</span>
+                <span className="text-amber-600 dark:text-amber-400 font-semibold">Medium</span>
                 <span className="text-zinc-500 dark:text-zinc-500 font-medium">{solvedMedium} / {mediumCount}</span>
               </div>
               <div className="flex justify-between items-center text-[11px]">
@@ -70,11 +70,11 @@ function StatsSidebar({
 
       {/* Muted developer card */}
       <div className="bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-900 rounded-xl p-5 space-y-2 transition-colors duration-200">
-        <h4 className="text-[10px] font-bold text-zinc-400 dark:text-zinc-555 uppercase tracking-wider">Algorithm Tip</h4>
+        <h4 className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">Algorithm Tip</h4>
         <p className="text-zinc-700 dark:text-zinc-400 text-xs leading-relaxed italic">
           "First, solve the problem. Then, write the code."
         </p>
-        <span className="text-zinc-400 dark:text-zinc-650 text-[10px] block text-right">- John Johnson</span>
+        <span className="text-zinc-400 dark:text-zinc-500 text-[10px] block text-right">- John Johnson</span>
       </div>
     </div>
   );

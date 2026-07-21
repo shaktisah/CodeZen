@@ -166,7 +166,7 @@ function AdminChallengeForm({ editingProblem, onSubmit, onCancel, submitting, ac
       {/* Core Fields */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
         <div className="md:col-span-2">
-          <label className="text-xs font-bold text-zinc-550 dark:text-zinc-400 mb-1.5 block">Challenge Title</label>
+          <label className="text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1.5 block">Challenge Title</label>
           <input
             type="text"
             value={title}
@@ -177,7 +177,7 @@ function AdminChallengeForm({ editingProblem, onSubmit, onCancel, submitting, ac
         </div>
 
         <div>
-          <label className="text-xs font-bold text-zinc-550 dark:text-zinc-400 mb-1.5 block">Difficulty</label>
+          <label className="text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1.5 block">Difficulty</label>
           <select
             value={difficulty}
             onChange={(e) => setDifficulty(e.target.value)}
@@ -191,7 +191,7 @@ function AdminChallengeForm({ editingProblem, onSubmit, onCancel, submitting, ac
       </div>
 
       <div>
-        <label className="text-xs font-bold text-zinc-550 dark:text-zinc-400 mb-1.5 block">Tags (comma-separated)</label>
+        <label className="text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1.5 block">Tags (comma-separated)</label>
         <input
           type="text"
           value={tagsInput}
@@ -202,13 +202,13 @@ function AdminChallengeForm({ editingProblem, onSubmit, onCancel, submitting, ac
       </div>
 
       <div>
-        <label className="text-xs font-bold text-zinc-550 dark:text-zinc-400 mb-1.5 block">Problem Description</label>
+        <label className="text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1.5 block">Problem Description</label>
         <textarea
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           rows={6}
           placeholder="Describe the challenge parameters, formatting, and constraints..."
-          className="w-full bg-white dark:bg-[#09090b] border border-zinc-300 dark:border-zinc-900 rounded-lg py-2 px-3 text-xs font-mono text-zinc-800 dark:text-zinc-200 placeholder-zinc-400 dark:placeholder-zinc-650 focus:outline-none focus:border-cyan-600 transition-colors"
+          className="w-full bg-white dark:bg-[#09090b] border border-zinc-300 dark:border-zinc-900 rounded-lg py-2 px-3 text-xs font-mono text-zinc-800 dark:text-zinc-200 placeholder-zinc-400 dark:placeholder-zinc-600 focus:outline-none focus:border-cyan-600 transition-colors"
         />
       </div>
 
@@ -217,7 +217,7 @@ function AdminChallengeForm({ editingProblem, onSubmit, onCancel, submitting, ac
         <div className="border-t border-zinc-200 dark:border-zinc-900 pt-5">
           <div className="flex justify-between items-center mb-3">
             <div>
-              <h4 className="text-xs font-bold text-zinc-550 dark:text-zinc-400 uppercase tracking-wider">Visible Test Cases</h4>
+              <h4 className="text-xs font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">Visible Test Cases</h4>
             </div>
             <button type="button" onClick={addVisibleTestCase} className="text-[10px] font-bold text-cyan-600 dark:text-cyan-400 bg-cyan-50 dark:bg-cyan-950/20 border border-cyan-200 dark:border-cyan-900/40 px-2.5 py-1 rounded-md cursor-pointer">
               + Add Case
@@ -231,7 +231,7 @@ function AdminChallengeForm({ editingProblem, onSubmit, onCancel, submitting, ac
                   <button
                     type="button"
                     onClick={() => removeVisibleTestCase(idx)}
-                    className="absolute top-3 right-3 text-zinc-400 dark:text-zinc-650 hover:text-red-600 dark:hover:text-red-400 text-[10px] font-bold cursor-pointer"
+                    className="absolute top-3 right-3 text-zinc-400 dark:text-zinc-500 hover:text-red-600 dark:hover:text-red-400 text-[10px] font-bold cursor-pointer"
                   >
                     Delete
                   </button>
@@ -240,7 +240,7 @@ function AdminChallengeForm({ editingProblem, onSubmit, onCancel, submitting, ac
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="text-[10px] font-bold text-zinc-400 dark:text-zinc-550 mb-1 block">Input parameters</label>
+                    <label className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 mb-1 block">Input parameters</label>
                     <input
                       type="text"
                       value={tc.input}
@@ -250,7 +250,7 @@ function AdminChallengeForm({ editingProblem, onSubmit, onCancel, submitting, ac
                     />
                   </div>
                   <div>
-                    <label className="text-[10px] font-bold text-zinc-400 dark:text-zinc-555 mb-1 block">Expected Output</label>
+                    <label className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 mb-1 block">Expected Output</label>
                     <input
                       type="text"
                       value={tc.output}
@@ -261,13 +261,13 @@ function AdminChallengeForm({ editingProblem, onSubmit, onCancel, submitting, ac
                   </div>
                 </div>
                 <div>
-                  <label className="text-[10px] font-bold text-zinc-400 dark:text-zinc-555 mb-1 block">Explanation (optional)</label>
+                  <label className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 mb-1 block">Explanation (optional)</label>
                   <input
                     type="text"
                     value={tc.explanation}
                     onChange={(e) => updateVisibleTestCase(idx, 'explanation', e.target.value)}
                     placeholder="Why this output is expected..."
-                    className="w-full bg-white dark:bg-[#09090b] border border-zinc-300 dark:border-zinc-900 rounded-lg py-1.5 px-3 text-xs text-zinc-850 dark:text-zinc-200"
+                    className="w-full bg-white dark:bg-[#09090b] border border-zinc-300 dark:border-zinc-900 rounded-lg py-1.5 px-3 text-xs text-zinc-800 dark:text-zinc-200"
                   />
                 </div>
               </div>
@@ -278,7 +278,7 @@ function AdminChallengeForm({ editingProblem, onSubmit, onCancel, submitting, ac
         <div className="border-t border-zinc-200 dark:border-zinc-900 pt-5">
           <div className="flex justify-between items-center mb-3">
             <div>
-              <h4 className="text-xs font-bold text-zinc-550 dark:text-zinc-400 uppercase tracking-wider">Hidden Test Cases</h4>
+              <h4 className="text-xs font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">Hidden Test Cases</h4>
             </div>
             <button type="button" onClick={addHiddenTestCase} className="text-[10px] font-bold text-cyan-600 dark:text-cyan-400 bg-cyan-50 dark:bg-cyan-950/20 border border-cyan-200 dark:border-cyan-900/40 px-2.5 py-1 rounded-md cursor-pointer">
               + Add Case
@@ -292,7 +292,7 @@ function AdminChallengeForm({ editingProblem, onSubmit, onCancel, submitting, ac
                   <button
                     type="button"
                     onClick={() => removeHiddenTestCase(idx)}
-                    className="absolute top-3 right-3 text-zinc-400 dark:text-zinc-650 hover:text-red-600 dark:hover:text-red-400 text-[10px] font-bold cursor-pointer"
+                    className="absolute top-3 right-3 text-zinc-400 dark:text-zinc-500 hover:text-red-600 dark:hover:text-red-400 text-[10px] font-bold cursor-pointer"
                   >
                     Delete
                   </button>
@@ -301,7 +301,7 @@ function AdminChallengeForm({ editingProblem, onSubmit, onCancel, submitting, ac
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="text-[10px] font-bold text-zinc-400 dark:text-zinc-555 mb-1 block">Input parameters</label>
+                    <label className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 mb-1 block">Input parameters</label>
                     <input
                       type="text"
                       value={tc.input}
@@ -311,7 +311,7 @@ function AdminChallengeForm({ editingProblem, onSubmit, onCancel, submitting, ac
                     />
                   </div>
                   <div>
-                    <label className="text-[10px] font-bold text-zinc-400 dark:text-zinc-555 mb-1 block">Expected Output</label>
+                    <label className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 mb-1 block">Expected Output</label>
                     <input
                       type="text"
                       value={tc.output}
@@ -330,7 +330,7 @@ function AdminChallengeForm({ editingProblem, onSubmit, onCancel, submitting, ac
       {/* Start Code & Reference Solutions */}
       <div className="border-t border-zinc-200 dark:border-zinc-900 pt-5 space-y-4">
         <div>
-          <h4 className="text-xs font-bold text-zinc-555 dark:text-zinc-400 uppercase tracking-wider">Code Configurations</h4>
+          <h4 className="text-xs font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">Code Configurations</h4>
         </div>
 
         {/* JS collapse */}
@@ -339,23 +339,23 @@ function AdminChallengeForm({ editingProblem, onSubmit, onCancel, submitting, ac
           <div className="collapse-title text-xs font-bold text-cyan-600 dark:text-cyan-400">JavaScript Configuration</div>
           <div className="collapse-content grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
             <div>
-              <label className="text-[10px] font-bold text-zinc-450 dark:text-zinc-500 mb-1 block">Starting Template</label>
+              <label className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 mb-1 block">Starting Template</label>
               <textarea
                 value={startCodeJS}
                 onChange={(e) => setStartCodeJS(e.target.value)}
                 rows={5}
                 placeholder="function twoSum(nums, target) { ... }"
-                className="w-full bg-white dark:bg-zinc-950 border border-zinc-250 dark:border-zinc-900 font-mono text-xs focus:border-cyan-600 rounded-lg p-2.5 text-zinc-850 dark:text-zinc-200"
+                className="w-full bg-white dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-900 font-mono text-xs focus:border-cyan-600 rounded-lg p-2.5 text-zinc-800 dark:text-zinc-200"
               />
             </div>
             <div>
-              <label className="text-[10px] font-bold text-zinc-455 dark:text-zinc-500 mb-1 block">Reference Solution</label>
+              <label className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 mb-1 block">Reference Solution</label>
               <textarea
                 value={refSolutionJS}
                 onChange={(e) => setRefSolutionJS(e.target.value)}
                 rows={5}
                 placeholder="function twoSum(nums, target) { return solution; }"
-                className="w-full bg-white dark:bg-zinc-950 border border-zinc-250 dark:border-zinc-900 font-mono text-xs focus:border-cyan-600 rounded-lg p-2.5 text-zinc-850 dark:text-zinc-200"
+                className="w-full bg-white dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-900 font-mono text-xs focus:border-cyan-600 rounded-lg p-2.5 text-zinc-800 dark:text-zinc-200"
               />
             </div>
           </div>
@@ -367,21 +367,21 @@ function AdminChallengeForm({ editingProblem, onSubmit, onCancel, submitting, ac
           <div className="collapse-title text-xs font-bold text-cyan-600 dark:text-cyan-400">Python Configuration</div>
           <div className="collapse-content grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
             <div>
-              <label className="text-[10px] font-bold text-zinc-455 dark:text-zinc-500 mb-1 block">Starting Template</label>
+              <label className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 mb-1 block">Starting Template</label>
               <textarea
                 value={startCodePy}
                 onChange={(e) => setStartCodePy(e.target.value)}
                 rows={5}
-                className="w-full bg-white dark:bg-zinc-950 border border-zinc-250 dark:border-zinc-900 font-mono text-xs focus:border-cyan-600 rounded-lg p-2.5 text-zinc-850 dark:text-zinc-200"
+                className="w-full bg-white dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-900 font-mono text-xs focus:border-cyan-600 rounded-lg p-2.5 text-zinc-800 dark:text-zinc-200"
               />
             </div>
             <div>
-              <label className="text-[10px] font-bold text-zinc-455 dark:text-zinc-500 mb-1 block">Reference Solution</label>
+              <label className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 mb-1 block">Reference Solution</label>
               <textarea
                 value={refSolutionPy}
                 onChange={(e) => setRefSolutionPy(e.target.value)}
                 rows={5}
-                className="w-full bg-white dark:bg-zinc-950 border border-zinc-250 dark:border-zinc-900 font-mono text-xs focus:border-cyan-600 rounded-lg p-2.5 text-zinc-850 dark:text-zinc-200"
+                className="w-full bg-white dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-900 font-mono text-xs focus:border-cyan-600 rounded-lg p-2.5 text-zinc-800 dark:text-zinc-200"
               />
             </div>
           </div>
@@ -393,21 +393,21 @@ function AdminChallengeForm({ editingProblem, onSubmit, onCancel, submitting, ac
           <div className="collapse-title text-xs font-bold text-cyan-600 dark:text-cyan-400">C++ Configuration</div>
           <div className="collapse-content grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
             <div>
-              <label className="text-[10px] font-bold text-zinc-455 dark:text-zinc-500 mb-1 block">Starting Template</label>
+              <label className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 mb-1 block">Starting Template</label>
               <textarea
                 value={startCodeCPP}
                 onChange={(e) => setStartCodeCPP(e.target.value)}
                 rows={5}
-                className="w-full bg-white dark:bg-zinc-950 border border-zinc-250 dark:border-zinc-900 font-mono text-xs focus:border-cyan-600 rounded-lg p-2.5 text-zinc-855 dark:text-zinc-200"
+                className="w-full bg-white dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-900 font-mono text-xs focus:border-cyan-600 rounded-lg p-2.5 text-zinc-800 dark:text-zinc-200"
               />
             </div>
             <div>
-              <label className="text-[10px] font-bold text-zinc-455 dark:text-zinc-500 mb-1 block">Reference Solution</label>
+              <label className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 mb-1 block">Reference Solution</label>
               <textarea
                 value={refSolutionCPP}
                 onChange={(e) => setRefSolutionCPP(e.target.value)}
                 rows={5}
-                className="w-full bg-white dark:bg-zinc-950 border border-zinc-250 dark:border-zinc-900 font-mono text-xs focus:border-cyan-600 rounded-lg p-2.5 text-zinc-855 dark:text-zinc-200"
+                className="w-full bg-white dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-900 font-mono text-xs focus:border-cyan-600 rounded-lg p-2.5 text-zinc-800 dark:text-zinc-200"
               />
             </div>
           </div>
@@ -419,21 +419,21 @@ function AdminChallengeForm({ editingProblem, onSubmit, onCancel, submitting, ac
           <div className="collapse-title text-xs font-bold text-cyan-600 dark:text-cyan-400">Java Configuration</div>
           <div className="collapse-content grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
             <div>
-              <label className="text-[10px] font-bold text-zinc-455 dark:text-zinc-500 mb-1 block">Starting Template</label>
+              <label className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 mb-1 block">Starting Template</label>
               <textarea
                 value={startCodeJava}
                 onChange={(e) => setStartCodeJava(e.target.value)}
                 rows={5}
-                className="w-full bg-white dark:bg-zinc-950 border border-zinc-250 dark:border-zinc-900 font-mono text-xs focus:border-cyan-600 rounded-lg p-2.5 text-zinc-855 dark:text-zinc-200"
+                className="w-full bg-white dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-900 font-mono text-xs focus:border-cyan-600 rounded-lg p-2.5 text-zinc-800 dark:text-zinc-200"
               />
             </div>
             <div>
-              <label className="text-[10px] font-bold text-zinc-455 dark:text-zinc-500 mb-1 block">Reference Solution</label>
+              <label className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 mb-1 block">Reference Solution</label>
               <textarea
                 value={refSolutionJava}
                 onChange={(e) => setRefSolutionJava(e.target.value)}
                 rows={5}
-                className="w-full bg-white dark:bg-zinc-950 border border-zinc-250 dark:border-zinc-900 font-mono text-xs focus:border-cyan-600 rounded-lg p-2.5 text-zinc-855 dark:text-zinc-200"
+                className="w-full bg-white dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-900 font-mono text-xs focus:border-cyan-600 rounded-lg p-2.5 text-zinc-800 dark:text-zinc-200"
               />
             </div>
           </div>
@@ -452,7 +452,7 @@ function AdminChallengeForm({ editingProblem, onSubmit, onCancel, submitting, ac
         <button
           type="submit"
           disabled={submitting}
-          className="bg-cyan-600 hover:bg-cyan-550 dark:bg-cyan-650 dark:hover:bg-cyan-600 text-white font-bold text-xs px-5 py-2.5 rounded-lg transition-colors shadow-lg shadow-cyan-500/10 cursor-pointer disabled:opacity-40 flex items-center gap-2"
+          className="bg-cyan-600 hover:bg-cyan-500 dark:bg-cyan-600 dark:hover:bg-cyan-500 text-white font-bold text-xs px-5 py-2.5 rounded-lg transition-colors shadow-lg shadow-cyan-500/10 cursor-pointer disabled:opacity-40 flex items-center gap-2"
         >
           {submitting ? (
             <>

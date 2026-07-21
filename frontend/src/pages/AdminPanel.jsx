@@ -246,7 +246,7 @@ function AdminPanel() {
               setStatusMessage(null);
             }}
             className={`pb-3 px-1.5 font-bold text-xs transition-all border-b-2 cursor-pointer ${
-              activeTab === 'manage' ? 'border-cyan-600 text-zinc-900 dark:border-cyan-500 dark:text-white' : 'border-transparent text-zinc-400 dark:text-zinc-550 hover:text-zinc-700 dark:hover:text-zinc-300'
+              activeTab === 'manage' ? 'border-cyan-600 text-zinc-900 dark:border-cyan-500 dark:text-white' : 'border-transparent text-zinc-400 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-300'
             }`}
           >
             Manage Challenges ({problems.length})
@@ -260,14 +260,14 @@ function AdminPanel() {
               setEditingProblem(null);
             }}
             className={`pb-3 px-1.5 font-bold text-xs transition-all border-b-2 cursor-pointer ${
-              activeTab === 'create' ? 'border-cyan-600 text-zinc-900 dark:border-cyan-500 dark:text-white' : 'border-transparent text-zinc-400 dark:text-zinc-550 hover:text-zinc-700 dark:hover:text-zinc-300'
+              activeTab === 'create' ? 'border-cyan-600 text-zinc-900 dark:border-cyan-500 dark:text-white' : 'border-transparent text-zinc-400 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-300'
             }`}
           >
             Add New Challenge
           </button>
 
           {activeTab === 'edit' && (
-            <span className="pb-3 px-1.5 font-bold text-xs border-b-2 border-cyan-400 text-cyan-600 dark:text-cyan-455">
+            <span className="pb-3 px-1.5 font-bold text-xs border-b-2 border-cyan-400 text-cyan-600 dark:text-cyan-400">
               Editing: {editingProblem?.title}
             </span>
           )}

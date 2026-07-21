@@ -85,7 +85,7 @@ function Profile() {
         <div className="flex-1 flex flex-col items-center justify-center gap-4 p-4 text-center">
           <div className="p-4 bg-rose-50 dark:bg-rose-950/20 border border-rose-200 dark:border-rose-900/40 rounded-2xl max-w-md shadow-sm">
             <h3 className="text-sm font-bold text-rose-600 dark:text-rose-400 uppercase tracking-wide">Error Loading Profile</h3>
-            <p className="text-xs text-zinc-550 dark:text-zinc-400 mt-1.5">{errorMsg}</p>
+            <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1.5">{errorMsg}</p>
           </div>
           <button 
             onClick={fetchProfileDetails}
@@ -158,14 +158,14 @@ function Profile() {
   );
 
   return (
-    <div className="min-h-screen bg-zinc-50 dark:bg-[#09090b] text-zinc-850 dark:text-zinc-150 font-sans flex flex-col selection:bg-cyan-500/20 selection:text-cyan-200 transition-colors duration-200">
+    <div className="min-h-screen bg-zinc-50 dark:bg-[#09090b] text-zinc-800 dark:text-zinc-100 font-sans flex flex-col selection:bg-cyan-500/20 selection:text-cyan-200 transition-colors duration-200">
       <Navbar />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full space-y-8">
         
         {/* User Intro Banner */}
         <div className="bg-white dark:bg-[#0e0e11] border border-zinc-200 dark:border-zinc-900 rounded-2xl p-6 sm:p-8 shadow-sm flex flex-col sm:flex-row items-center sm:items-start gap-6 transition-colors duration-200">
-          <div className="w-20 h-20 rounded-2xl bg-gradient-to-tr from-cyan-600 to-indigo-650 flex items-center justify-center font-bold text-white text-3xl uppercase shadow-md select-none shrink-0">
+          <div className="w-20 h-20 rounded-2xl bg-gradient-to-tr from-cyan-600 to-indigo-600 flex items-center justify-center font-bold text-white text-3xl uppercase shadow-md select-none shrink-0">
             {profileData.firstName ? profileData.firstName[0] : 'U'}
           </div>
           
@@ -174,7 +174,7 @@ function Profile() {
               <h1 className="text-2xl font-extrabold text-zinc-900 dark:text-white tracking-tight">
                 {profileData.firstName} {profileData.lastName}
               </h1>
-              <span className="badge badge-sm bg-cyan-50 dark:bg-cyan-950 border-cyan-200 dark:border-cyan-850 text-cyan-600 dark:text-cyan-400 capitalize font-semibold self-center px-2">
+              <span className="badge badge-sm bg-cyan-50 dark:bg-cyan-950 border-cyan-200 dark:border-cyan-800 text-cyan-600 dark:text-cyan-400 capitalize font-semibold self-center px-2">
                 {profileData.role}
               </span>
             </div>
@@ -183,7 +183,7 @@ function Profile() {
               Joined on {profileData.createdAt ? new Date(profileData.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' }) : 'N/A'}
             </p>
 
-            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-4 gap-y-1 text-xs text-zinc-650 dark:text-zinc-400 pt-1">
+            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-4 gap-y-1 text-xs text-zinc-600 dark:text-zinc-400 pt-1">
               <span className="flex items-center gap-1.5">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.8} stroke="currentColor" className="w-4 h-4 text-zinc-400">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25H4.5A2.25 2.25 0 0 1 2.25 17.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5H4.5a2.25 2.25 0 0 0-2.25 2.25m19.5 0v1.5a2.25 2.25 0 0 1-2.25 2.25H4.5A2.25 2.25 0 0 1 2.25 10.5v-1.5m19.5 0v.008c0 .386-.021.77-.063 1.152M2.25 10.5v.008c0 .386.021.77.063 1.152M12 10.5V18" />
@@ -208,7 +208,7 @@ function Profile() {
             onClick={() => setActiveTab('overview')} 
             className={`pb-3 border-b-2 cursor-pointer transition-colors duration-200 ${
               activeTab === 'overview' 
-                ? 'border-cyan-550 text-cyan-600 dark:text-cyan-400 font-bold' 
+                ? 'border-cyan-500 text-cyan-600 dark:text-cyan-400 font-bold' 
                 : 'border-transparent text-zinc-500 hover:text-zinc-950 dark:hover:text-white'
             }`}
           >
@@ -218,7 +218,7 @@ function Profile() {
             onClick={() => setActiveTab('submissions')} 
             className={`pb-3 border-b-2 cursor-pointer transition-colors duration-200 ${
               activeTab === 'submissions' 
-                ? 'border-cyan-550 text-cyan-600 dark:text-cyan-400 font-bold' 
+                ? 'border-cyan-500 text-cyan-600 dark:text-cyan-400 font-bold' 
                 : 'border-transparent text-zinc-500 hover:text-zinc-950 dark:hover:text-white'
             }`}
           >
@@ -231,7 +231,7 @@ function Profile() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Left Column: Visual Analytics Stats */}
             <div className="bg-white dark:bg-[#0e0e11] border border-zinc-200 dark:border-zinc-900 rounded-2xl p-6 shadow-sm space-y-6 flex flex-col justify-center items-center text-center">
-              <h2 className="text-sm font-bold text-zinc-800 dark:text-zinc-350 self-start uppercase tracking-wider">Overall Progress</h2>
+              <h2 className="text-sm font-bold text-zinc-800 dark:text-zinc-300 self-start uppercase tracking-wider">Overall Progress</h2>
               
               {/* Circular Progress Wheel */}
               <div className="relative w-40 h-40 flex items-center justify-center select-none">
@@ -259,7 +259,7 @@ function Profile() {
                 </div>
               </div>
 
-              <p className="text-zinc-500 dark:text-zinc-450 text-xs max-w-xs leading-relaxed">
+              <p className="text-zinc-500 dark:text-zinc-400 text-xs max-w-xs leading-relaxed">
                 You have resolved <span className="font-bold text-zinc-950 dark:text-white">{totalProblemsCount > 0 ? ((solvedCount / totalProblemsCount) * 100).toFixed(1) : 0}%</span> of the available challenges on the platform. Keep coding to level up!
               </p>
             </div>
@@ -267,19 +267,19 @@ function Profile() {
             {/* Right Column: Breakdown Cards */}
             <div className="md:col-span-2 space-y-6">
               <div className="bg-white dark:bg-[#0e0e11] border border-zinc-200 dark:border-zinc-900 rounded-2xl p-6 shadow-sm space-y-6">
-                <h2 className="text-sm font-bold text-zinc-800 dark:text-zinc-350 uppercase tracking-wider">Difficulty Breakdown</h2>
+                <h2 className="text-sm font-bold text-zinc-800 dark:text-zinc-300 uppercase tracking-wider">Difficulty Breakdown</h2>
 
                 <div className="space-y-5">
                   {/* Easy Card */}
                   <div className="space-y-2">
                     <div className="flex justify-between items-center text-xs font-semibold">
-                      <span className="text-teal-650 dark:text-teal-400 flex items-center gap-1.5 font-bold uppercase tracking-wide">
+                      <span className="text-teal-600 dark:text-teal-400 flex items-center gap-1.5 font-bold uppercase tracking-wide">
                         <span className="w-2.5 h-2.5 rounded-full bg-teal-500"></span>
                         Easy
                       </span>
                       <span className="text-zinc-700 dark:text-zinc-400">{solvedEasy} <span className="text-zinc-400 font-normal">/ {totalEasyCount} solved</span></span>
                     </div>
-                    <div className="w-full bg-zinc-100 dark:bg-zinc-900 rounded-full h-2.5 overflow-hidden border border-zinc-200/50 dark:border-zinc-850">
+                    <div className="w-full bg-zinc-100 dark:bg-zinc-900 rounded-full h-2.5 overflow-hidden border border-zinc-200/50 dark:border-zinc-800">
                       <div 
                         className="bg-teal-500 h-full rounded-full transition-all duration-300"
                         style={{ width: `${totalEasyCount > 0 ? (solvedEasy / totalEasyCount) * 100 : 0}%` }}
@@ -290,15 +290,15 @@ function Profile() {
                   {/* Medium Card */}
                   <div className="space-y-2">
                     <div className="flex justify-between items-center text-xs font-semibold">
-                      <span className="text-amber-655 dark:text-amber-400 flex items-center gap-1.5 font-bold uppercase tracking-wide">
+                      <span className="text-amber-600 dark:text-amber-400 flex items-center gap-1.5 font-bold uppercase tracking-wide">
                         <span className="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
                         Medium
                       </span>
                       <span className="text-zinc-700 dark:text-zinc-400">{solvedMedium} <span className="text-zinc-400 font-normal">/ {totalMediumCount} solved</span></span>
                     </div>
-                    <div className="w-full bg-zinc-100 dark:bg-zinc-900 rounded-full h-2.5 overflow-hidden border border-zinc-200/50 dark:border-zinc-850">
+                    <div className="w-full bg-zinc-100 dark:bg-zinc-900 rounded-full h-2.5 overflow-hidden border border-zinc-200/50 dark:border-zinc-800">
                       <div 
-                        className="bg-amber-550 h-full rounded-full transition-all duration-300"
+                        className="bg-amber-500 h-full rounded-full transition-all duration-300"
                         style={{ width: `${totalMediumCount > 0 ? (solvedMedium / totalMediumCount) * 100 : 0}%` }}
                       ></div>
                     </div>
@@ -307,13 +307,13 @@ function Profile() {
                   {/* Hard Card */}
                   <div className="space-y-2">
                     <div className="flex justify-between items-center text-xs font-semibold">
-                      <span className="text-rose-650 dark:text-rose-450 flex items-center gap-1.5 font-bold uppercase tracking-wide">
+                      <span className="text-rose-600 dark:text-rose-400 flex items-center gap-1.5 font-bold uppercase tracking-wide">
                         <span className="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
                         Hard
                       </span>
                       <span className="text-zinc-700 dark:text-zinc-400">{solvedHard} <span className="text-zinc-400 font-normal">/ {totalHardCount} solved</span></span>
                     </div>
-                    <div className="w-full bg-zinc-100 dark:bg-zinc-900 rounded-full h-2.5 overflow-hidden border border-zinc-200/50 dark:border-zinc-850">
+                    <div className="w-full bg-zinc-100 dark:bg-zinc-900 rounded-full h-2.5 overflow-hidden border border-zinc-200/50 dark:border-zinc-800">
                       <div 
                         className="bg-rose-500 h-full rounded-full transition-all duration-300"
                         style={{ width: `${totalHardCount > 0 ? (solvedHard / totalHardCount) * 100 : 0}%` }}
@@ -325,18 +325,18 @@ function Profile() {
 
               {/* Solved Problems List Shortcut */}
               <div className="bg-white dark:bg-[#0e0e11] border border-zinc-200 dark:border-zinc-900 rounded-2xl p-6 shadow-sm space-y-4">
-                <h2 className="text-sm font-bold text-zinc-800 dark:text-zinc-350 uppercase tracking-wider">Solved Challenges ({solvedCount})</h2>
+                <h2 className="text-sm font-bold text-zinc-800 dark:text-zinc-300 uppercase tracking-wider">Solved Challenges ({solvedCount})</h2>
                 
                 {profileData.problemSolved && profileData.problemSolved.filter(p => p !== null && p !== undefined && p._id).length > 0 ? (
                   <div className="flex flex-wrap gap-2 pt-1">
                     {profileData.problemSolved
                       .filter(problem => problem !== null && problem !== undefined && problem._id)
                       .map((problem) => {
-                      let tagColor = 'text-teal-650 bg-teal-50 border-teal-200 dark:text-teal-400 dark:bg-teal-950/20 dark:border-teal-900/30';
+                      let tagColor = 'text-teal-600 bg-teal-50 border-teal-200 dark:text-teal-400 dark:bg-teal-950/20 dark:border-teal-900/30';
                       if (problem.difficulty?.toLowerCase() === 'medium') {
-                        tagColor = 'text-amber-655 bg-amber-50 border-amber-200 dark:text-amber-400 dark:bg-amber-950/20 dark:border-amber-900/30';
+                        tagColor = 'text-amber-600 bg-amber-50 border-amber-200 dark:text-amber-400 dark:bg-amber-950/20 dark:border-amber-900/30';
                       } else if (problem.difficulty?.toLowerCase() === 'hard') {
-                        tagColor = 'text-rose-650 bg-rose-50 border-rose-200 dark:text-rose-455 dark:bg-rose-950/20 dark:border-rose-900/30';
+                        tagColor = 'text-rose-600 bg-rose-50 border-rose-200 dark:text-rose-400 dark:bg-rose-950/20 dark:border-rose-900/30';
                       }
 
                       return (
@@ -371,7 +371,7 @@ function Profile() {
                   placeholder="Search problem name..." 
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="input input-sm border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 w-full pl-8 text-xs h-9"
+                  className="input input-sm border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-500 w-full pl-8 text-xs h-9"
                 />
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 text-zinc-400 absolute left-2.5 top-2.5">
                   <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.63 10.63Z" />
@@ -383,26 +383,26 @@ function Profile() {
                 <select 
                   value={languageFilter} 
                   onChange={(e) => setLanguageFilter(e.target.value)}
-                  className="select select-sm border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-955 text-xs h-9 min-h-0"
+                  className="border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-zinc-800 dark:text-zinc-200 text-xs h-9 px-3 rounded-lg focus:outline-none focus:border-cyan-600 font-medium cursor-pointer shadow-sm"
                 >
-                  <option value="">All Languages</option>
-                  <option value="javascript">JavaScript</option>
-                  <option value="python">Python</option>
-                  <option value="cpp">C++</option>
-                  <option value="java">Java</option>
+                  <option className="bg-white dark:bg-zinc-900 text-zinc-800 dark:text-zinc-200" value="">All Languages</option>
+                  <option className="bg-white dark:bg-zinc-900 text-zinc-800 dark:text-zinc-200" value="javascript">JavaScript</option>
+                  <option className="bg-white dark:bg-zinc-900 text-zinc-800 dark:text-zinc-200" value="python">Python</option>
+                  <option className="bg-white dark:bg-zinc-900 text-zinc-800 dark:text-zinc-200" value="cpp">C++</option>
+                  <option className="bg-white dark:bg-zinc-900 text-zinc-800 dark:text-zinc-200" value="java">Java</option>
                 </select>
 
                 {/* Status filter */}
                 <select 
                   value={statusFilter} 
                   onChange={(e) => setStatusFilter(e.target.value)}
-                  className="select select-sm border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-955 text-xs h-9 min-h-0"
+                  className="border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-zinc-800 dark:text-zinc-200 text-xs h-9 px-3 rounded-lg focus:outline-none focus:border-cyan-600 font-medium cursor-pointer shadow-sm"
                 >
-                  <option value="">All Statuses</option>
-                  <option value="Accepted">Accepted</option>
-                  <option value="Wrong Answer">Wrong Answer</option>
-                  <option value="Compilation Error">Compilation Error</option>
-                  <option value="Runtime Error">Runtime Error</option>
+                  <option className="bg-white dark:bg-zinc-900 text-zinc-800 dark:text-zinc-200" value="">All Statuses</option>
+                  <option className="bg-white dark:bg-zinc-900 text-zinc-800 dark:text-zinc-200" value="Accepted">Accepted</option>
+                  <option className="bg-white dark:bg-zinc-900 text-zinc-800 dark:text-zinc-200" value="Wrong Answer">Wrong Answer</option>
+                  <option className="bg-white dark:bg-zinc-900 text-zinc-800 dark:text-zinc-200" value="Compilation Error">Compilation Error</option>
+                  <option className="bg-white dark:bg-zinc-900 text-zinc-800 dark:text-zinc-200" value="Runtime Error">Runtime Error</option>
                 </select>
               </div>
             </div>
@@ -411,7 +411,7 @@ function Profile() {
             <div className="overflow-x-auto">
               <table className="table w-full text-zinc-700 dark:text-zinc-300 border-none">
                 <thead>
-                  <tr className="border-b border-zinc-200 dark:border-zinc-900 text-zinc-400 dark:text-zinc-550 uppercase text-[10px] tracking-wider bg-zinc-50 dark:bg-zinc-900/10 font-bold">
+                  <tr className="border-b border-zinc-200 dark:border-zinc-900 text-zinc-400 dark:text-zinc-500 uppercase text-[10px] tracking-wider bg-zinc-50 dark:bg-zinc-900/10 font-bold">
                     <th>Problem</th>
                     <th>Status</th>
                     <th>Language</th>
@@ -425,7 +425,7 @@ function Profile() {
                     paginatedSubmissions.map((sub) => {
                       const isAccepted = sub.status === 'Accepted';
                       const statusColor = isAccepted 
-                        ? 'text-teal-650 bg-teal-50 border-teal-200 dark:text-teal-400 dark:bg-teal-950/20 dark:border-teal-900/35'
+                        ? 'text-teal-600 bg-teal-50 border-teal-200 dark:text-teal-400 dark:bg-teal-950/20 dark:border-teal-900/35'
                         : 'text-rose-600 bg-rose-50 border-rose-200 dark:text-rose-400 dark:bg-rose-950/20 dark:border-rose-900/35';
 
                       const problemTitle = sub.problemId?.title || 'Deleted Problem';
@@ -513,14 +513,14 @@ function Profile() {
                   Code Submission for {selectedSubmission.problemId?.title || 'Unknown Problem'}
                   <span className={`badge border text-[9px] px-1.5 py-0.5 font-bold rounded-md capitalize ${
                     selectedSubmission.status === 'Accepted'
-                      ? 'text-teal-650 bg-teal-50 border-teal-200 dark:text-teal-400 dark:bg-teal-950/20 dark:border-teal-900/35'
+                      ? 'text-teal-600 bg-teal-50 border-teal-200 dark:text-teal-400 dark:bg-teal-950/20 dark:border-teal-900/35'
                       : 'text-rose-600 bg-rose-50 border-rose-200 dark:text-rose-400 dark:bg-rose-950/20 dark:border-rose-900/35'
                   }`}>
                     {selectedSubmission.status}
                   </span>
                 </h3>
                 
-                <div className="flex gap-4 items-center text-[11px] text-zinc-500 dark:text-zinc-450 mt-1.5 font-medium">
+                <div className="flex gap-4 items-center text-[11px] text-zinc-500 dark:text-zinc-400 mt-1.5 font-medium">
                   <span>Language: <span className="text-zinc-800 dark:text-zinc-300 font-bold uppercase">{selectedSubmission.language}</span></span>
                   <span>Passed: <span className="text-zinc-800 dark:text-zinc-300 font-bold">{selectedSubmission.testCasesPassed} / {selectedSubmission.totalTestCases}</span></span>
                   {selectedSubmission.status === 'Accepted' && (
@@ -534,7 +534,7 @@ function Profile() {
 
               <button 
                 onClick={() => setSelectedSubmission(null)}
-                className="p-1 rounded-lg border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-900 text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-350 cursor-pointer"
+                className="p-1 rounded-lg border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-900 text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-300 cursor-pointer"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
@@ -547,14 +547,14 @@ function Profile() {
               
               {/* Compiler Error alert */}
               {selectedSubmission.errorMessage && (
-                <div className="p-3 bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900/40 rounded-xl text-xs text-red-650 dark:text-red-400 font-mono space-y-1">
+                <div className="p-3 bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900/40 rounded-xl text-xs text-red-600 dark:text-red-400 font-mono space-y-1">
                   <span className="font-bold block uppercase text-[10px] tracking-wider">Execution Feedback:</span>
-                  <pre className="whitespace-pre-wrap leading-relaxed">{selectedSubmission.errorMessage}</pre>
+                  <pre className="whitespace-pre-wrap leading-relaxed text-red-600 dark:text-red-400 !text-red-600 dark:!text-red-400">{selectedSubmission.errorMessage}</pre>
                 </div>
               )}
 
               {/* Code Container */}
-              <div className="relative group border border-zinc-800 dark:border-zinc-900 rounded-xl overflow-hidden shadow-inner bg-[#09090b] dark:bg-[#040405]">
+              <div className="relative group border border-zinc-800 dark:border-zinc-800 rounded-xl overflow-hidden shadow-inner bg-zinc-950 dark:bg-black">
                 {/* Copy button overlay */}
                 <button
                   onClick={() => handleCopyCode(selectedSubmission.code)}
@@ -568,15 +568,21 @@ function Profile() {
                   )}
                 </button>
 
-                <div className="font-mono text-xs overflow-x-auto p-4 flex gap-4 text-zinc-350 dark:text-zinc-400 select-text leading-6">
+                <div className="font-mono text-xs overflow-x-auto p-4 flex gap-4 select-text leading-6">
                   {/* Line Numbers */}
-                  <div className="text-zinc-500 dark:text-zinc-650 text-right select-none pr-3 border-r border-zinc-800 dark:border-zinc-900">
+                  <div 
+                    className="text-right select-none pr-3 border-r border-zinc-800 text-zinc-400 !text-zinc-400"
+                  >
                     {selectedSubmission.code.split('\n').map((_, index) => (
                       <div key={index}>{index + 1}</div>
                     ))}
                   </div>
                   {/* Actual Code */}
-                  <pre className="flex-1 overflow-x-auto whitespace-pre">{selectedSubmission.code}</pre>
+                  <pre 
+                    className="flex-1 overflow-x-auto whitespace-pre font-mono text-xs text-zinc-100 !text-zinc-100 code-pre-viewer"
+                  >
+                    <code>{selectedSubmission.code}</code>
+                  </pre>
                 </div>
               </div>
             </div>

@@ -76,12 +76,12 @@ function Navbar({ isAdminPanel = false }) {
           </button>
 
           {isAdminPanel ? (
-            <Link to="/" className="text-xs font-semibold text-zinc-650 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white transition-colors hover:bg-zinc-100 dark:hover:bg-zinc-900 px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-900">
+            <Link to="/" className="text-xs font-semibold text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white transition-colors hover:bg-zinc-100 dark:hover:bg-zinc-900 px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-900">
               Back to Dashboard
             </Link>
           ) : user ? (
             <div className="dropdown dropdown-end">
-              <label tabIndex={0} className="flex items-center gap-2 text-xs text-zinc-800 dark:text-zinc-350 hover:bg-zinc-100 dark:hover:bg-zinc-900/80 border border-zinc-200 dark:border-zinc-900 rounded-lg px-2.5 py-1.5 cursor-pointer transition-colors">
+              <label tabIndex={0} className="flex items-center gap-2 text-xs text-zinc-800 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-900/80 border border-zinc-200 dark:border-zinc-900 rounded-lg px-2.5 py-1.5 cursor-pointer transition-colors">
                 <div className="w-5 h-5 rounded-full bg-cyan-600 flex items-center justify-center font-bold text-white text-[10px] uppercase">
                   {user.firstName ? user.firstName[0] : 'U'}
                 </div>
@@ -108,7 +108,7 @@ function Navbar({ isAdminPanel = false }) {
                   </li>
                 )}
                 <li>
-                  <button onClick={handleLogout} className="text-red-650 hover:text-red-700 hover:bg-red-50 dark:text-red-400 dark:hover:text-red-300 dark:hover:bg-red-950/20 text-xs py-1.5 px-3 rounded-md text-left w-full cursor-pointer">
+                  <button onClick={handleLogout} className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:text-red-400 dark:hover:text-red-300 dark:hover:bg-red-950/20 text-xs py-1.5 px-3 rounded-md text-left w-full cursor-pointer">
                     Sign Out
                   </button>
                 </li>

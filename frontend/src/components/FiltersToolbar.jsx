@@ -33,22 +33,22 @@ function FiltersToolbar({
         <select
           value={difficultyFilter}
           onChange={(e) => setDifficultyFilter(e.target.value)}
-          className="select select-xs bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-900 text-zinc-700 dark:text-zinc-300 text-[11px] rounded-lg focus:outline-none focus:border-cyan-600 font-semibold"
+          className="bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-900 text-zinc-700 dark:text-zinc-300 text-[11px] rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-cyan-600 font-semibold cursor-pointer shadow-xs"
         >
-          <option value="">Difficulty</option>
-          <option value="easy">Easy</option>
-          <option value="medium">Medium</option>
-          <option value="hard">Hard</option>
+          <option className="bg-white dark:bg-[#09090b] text-zinc-800 dark:text-zinc-200" value="">Difficulty</option>
+          <option className="bg-white dark:bg-[#09090b] text-zinc-800 dark:text-zinc-200" value="easy">Easy</option>
+          <option className="bg-white dark:bg-[#09090b] text-zinc-800 dark:text-zinc-200" value="medium">Medium</option>
+          <option className="bg-white dark:bg-[#09090b] text-zinc-800 dark:text-zinc-200" value="hard">Hard</option>
         </select>
 
         <select
           value={selectedTag}
           onChange={(e) => setSelectedTag(e.target.value)}
-          className="select select-xs bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-900 text-zinc-700 dark:text-zinc-300 text-[11px] rounded-lg focus:outline-none focus:border-cyan-600 font-semibold"
+          className="bg-white dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-900 text-zinc-700 dark:text-zinc-300 text-[11px] rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-cyan-600 font-semibold cursor-pointer shadow-xs"
         >
-          <option value="">Tags</option>
+          <option className="bg-white dark:bg-[#09090b] text-zinc-800 dark:text-zinc-200" value="">Tags</option>
           {allTags.map((tag) => (
-            <option key={tag} value={tag}>
+            <option key={tag} value={tag} className="bg-white dark:bg-[#09090b] text-zinc-800 dark:text-zinc-200">
               {tag}
             </option>
           ))}

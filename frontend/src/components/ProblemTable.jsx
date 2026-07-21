@@ -18,7 +18,7 @@ function ProblemTable({ problems, solvedProblemIds, loading, user }) {
         <div className="overflow-x-auto">
           <table className="table w-full text-zinc-700 dark:text-zinc-300">
             <thead>
-              <tr className="border-b border-zinc-200 dark:border-zinc-900 text-zinc-400 dark:text-zinc-550 uppercase text-[10px] tracking-wider bg-zinc-50 dark:bg-zinc-900/10 font-bold">
+              <tr className="border-b border-zinc-200 dark:border-zinc-900 text-zinc-400 dark:text-zinc-500 uppercase text-[10px] tracking-wider bg-zinc-50 dark:bg-zinc-900/10 font-bold">
                 <th className="w-12 text-center">Status</th>
                 <th>Title</th>
                 <th>Difficulty</th>
@@ -33,7 +33,7 @@ function ProblemTable({ problems, solvedProblemIds, loading, user }) {
                   ? `/problem/${problem._id}` 
                   : `/login?redirect=${encodeURIComponent(`/problem/${problem._id}`)}`;
                 
-                let diffColorClass = 'text-teal-650 bg-teal-50 border-teal-200 dark:text-teal-400 dark:bg-teal-950/20 dark:border-teal-900/35';
+                let diffColorClass = 'text-teal-600 bg-teal-50 border-teal-200 dark:text-teal-400 dark:bg-teal-950/20 dark:border-teal-900/35';
                 if (problem.difficulty?.toLowerCase() === 'medium') {
                   diffColorClass = 'text-amber-600 bg-amber-50 border-amber-200 dark:text-amber-400 dark:bg-amber-950/20 dark:border-amber-900/35';
                 } else if (problem.difficulty?.toLowerCase() === 'hard') {
