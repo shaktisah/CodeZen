@@ -186,13 +186,20 @@ function Signup() {
           </div>
 
           <div className="flex justify-center">
-            <GoogleLogin
-              onSuccess={handleGoogleSuccess}
-              onError={() => setError('Google Sign-In failed')}
-              useOneTap
-              theme="outline"
-              shape="rectangular"
-            />
+            {import.meta.env.VITE_GOOGLE_CLIENT_ID ? (
+              <GoogleLogin
+                onSuccess={handleGoogleSuccess}
+                onError={() => setError('Google Sign-In failed')}
+                useOneTap
+                theme="outline"
+                shape="rectangular"
+              />
+            ) : (
+              <div className="w-full text-center p-3.5 border border-dashed border-zinc-200 dark:border-zinc-800 rounded-xl text-xs text-zinc-550 dark:text-zinc-400 bg-zinc-50/50 dark:bg-zinc-950/20">
+                <span className="font-medium block text-zinc-700 dark:text-zinc-300">Google Sign-In is not configured</span>
+                <span className="text-[10px] text-zinc-400 dark:text-zinc-500 mt-1 block">Please set VITE_GOOGLE_CLIENT_ID in the environment</span>
+              </div>
+            )}
           </div>
 
           <p className="text-center text-xs text-zinc-500 dark:text-zinc-400 mt-6">

@@ -220,6 +220,11 @@ const googleLogin = async (req, res) => {
       return res.status(400).send("Google credential is required");
     }
 
+    if (!process.env.GOOGLE_CLIENT_ID) {
+      console.error("GOOGLE_CLIENT_ID is not configured in backend environment variables.");
+      return res.status(500).send("Google authentication is not configured on the server.");
+    }
+
     const ticket = await googleClient.verifyIdToken({
       idToken: credential,
       audience: process.env.GOOGLE_CLIENT_ID
